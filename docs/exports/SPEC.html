@@ -200,6 +200,13 @@ the <em>same</em> event, exposes how the covering outlets lean (left /
 center / right), and produces a <strong>neutral AI synthesis</strong>
 focused on <strong>economic impact and the game theory behind
 events</strong>.</p>
+<p>Above all it is a <strong>relevance filter for the
+information-overloaded</strong> (D-012): it ranks every story by
+<em>economic impact × geographic proximity to a home region</em>
+(default: Indonesia), surfacing what touches your wallet and daily life
+— oil, tariffs, inflation, rates — and filtering out noise
+(celebrity/sports/entertainment). Identity: <em>world news through an
+Indonesian economic lens.</em></p>
 <p>It serves two audiences from one product, via a <strong>layered
 output</strong>: - <strong>Beginners</strong> (“finance-blind”) get a
 plain-language <em>“what this means for you.”</em> -
@@ -282,6 +289,17 @@ scope</td>
 </table>
 <p><strong>Flow:</strong>
 <code>Curator → [Bias + Game-Theory + Markets in parallel] → Editor/Explainer</code>.</p>
+<p><strong>Relevance (D-012):</strong> the Curator gathers/weights by
+<code>home_region</code> and filters noise; the Markets/Editor steps set
+each story’s <code>impact_score</code> + <code>impact_summary</code>
+(“why this matters to you”). Stories rank by
+<code>impact_score × region_relevance</code>, not recency.</p>
+<p><strong>Content (D-013):</strong> the crew analyzes each article’s
+<strong>full body</strong> (fetched ephemerally, not stored — only
+summaries persist); clustering uses title+lead. <strong>Source memory
+(D-014):</strong> the Bias agent reads + updates a <code>sources</code>
+reputation table so lean ratings reflect a track record, not a one-shot
+guess.</p>
 <p>The <strong>same crew</strong> powers both modes. For a daily
 briefing the Curator clusters the day’s headlines; for a question it
 gathers and clusters news about that specific topic.</p>
@@ -295,9 +313,10 @@ See <code>docs/05-SECURITY.md</code> §Trust &amp; abuse and
 <h2 id="data-sources-all-free-no-api-key">5. Data sources (all free, no
 API key)</h2>
 <ul>
-<li><strong>RSS feeds</strong> — curated cross-region list (Reuters, AP,
-BBC, Al Jazeera, CNBC, plus regional/Indonesian + Asian outlets) for
-reliable, attributed coverage.</li>
+<li><strong>RSS feeds</strong> — international (Reuters, AP, BBC, Al
+Jazeera, CNBC) <strong>plus Indonesian outlets</strong> (Antara, Kompas,
+Detik, Kontan, CNBC Indonesia, Jakarta Post) weighted highest for the
+home-region angle (D-012), plus regional/Asian sources.</li>
 <li><strong>GDELT</strong> — free global news-event database/API for
 breadth (“news from around countries”).</li>
 <li><strong>Markets context</strong> — free, no-key sources
@@ -342,19 +361,27 @@ model (overview — full detail in <code>docs/02-DATABASE.md</code>)</h2>
 <li><code>articles</code> — ingested news item + embedding +
 <code>cluster_id</code> + AI <code>lean</code> rating.</li>
 <li><code>stories</code> — one per cluster: topic, source spread,
-neutral synthesis, layers, sentiment.</li>
+neutral synthesis, layers, sentiment, plus relevance fields
+(<code>impact_score</code>, <code>impact_summary</code>,
+<code>affected_regions</code>, <code>region_relevance</code>) per
+D-012.</li>
 <li><code>briefings</code> — one per day: headline, overall sentiment,
 layers, the stories it includes.</li>
 <li><code>questions</code> — on-demand: question text, status
 (<code>pending→processing→done→error</code>), layers.</li>
 <li><code>agent_runs</code> <em>(optional)</em> — run metadata + Phoenix
 trace link, for the developer view.</li>
+<li><code>sources</code> — per-outlet <strong>reputation memory</strong>
+(lean history, reliability, divergence) the Bias agent reads + updates
+(D-014); <code>articles.author</code> captured when present.</li>
 </ul>
 <h2 id="website-overview-full-detail-in-docs04-ui-ux.md">9. Website
 (overview — full detail in <code>docs/04-UI-UX.md</code>)</h2>
 <ul>
 <li><strong>Home</strong> — today’s briefing; sentiment badge; beginner
-layer + “Go deeper →”.</li>
+layer + “Go deeper →”. Stories ranked by relevance (impact × region),
+each leading with its impact chain; a quiet “show everything we
+filtered” reveals the hidden noise.</li>
 <li><strong>Story view</strong> — the source-spread bar (e.g. <em>“14
 outlets · 5 left / 6 center / 3 right”</em>)
 <ul>

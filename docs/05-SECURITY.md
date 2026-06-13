@@ -78,6 +78,10 @@ confirm neither changes system behavior, only produces flagged/rejected text.
 - The Curator fetches from a **fixed allow-list** of RSS/GDELT endpoints — it does not
   fetch arbitrary URLs derived from article content or user input. This closes the SSRF
   path that would otherwise let injected content pull internal URLs.
+- **Article-body fetching (D-013):** full text is fetched only from article URLs that came
+  from the trusted feeds/GDELT, with a timeout, a response-size cap, and **no redirects to
+  private/internal addresses** (block RFC1918 / localhost / link-local). Never fetch URLs
+  found inside article text or user questions.
 
 ## 8. Abuse & cost controls
 

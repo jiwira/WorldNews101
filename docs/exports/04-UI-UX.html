@@ -218,8 +218,15 @@ date.</li>
 <li>The <strong>beginner layer</strong> rendered by default
 (<code>react-markdown</code>), with a <strong>“Go deeper →”</strong>
 toggle revealing <code>pro_md</code>.</li>
-<li>Below: the day’s <strong>top stories</strong> as cards (topic +
-source-spread mini-bar + sentiment).</li>
+<li>Below: the day’s <strong>top stories</strong> as cards,
+<strong>ranked by relevance</strong>
+(<code>impact_score × region_relevance</code>, D-012) — not recency.
+Each card leads with its <strong>impact chain</strong> (“Iran tension →
+oil → fuel/inflation”) so the <em>why-it-matters</em> is visible at a
+glance.</li>
+<li>A quiet <strong>“Show everything we filtered”</strong> link reveals
+the low-impact/off-region noise that was hidden by default — filter,
+don’t censor.</li>
 </ul>
 <h3 id="story-view">Story view</h3>
 <p>The signature screen. For one clustered story: -

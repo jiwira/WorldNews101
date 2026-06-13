@@ -45,6 +45,7 @@ DOCS = [
     ("docs/05-SECURITY.md", "05-SECURITY"),
     ("docs/06-DECISIONS.md", "06-DECISIONS"),
     ("docs/07-DEPLOYMENT.md", "07-DEPLOYMENT"),
+    ("docs/08-EDITORIAL-SOURCES.md", "08-EDITORIAL-SOURCES"),
 ]
 
 def main():

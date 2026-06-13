@@ -258,7 +258,14 @@ news</h3>
 <tr>
 <td><code>summary</code></td>
 <td>text null</td>
-<td>short extract (no full-text copyright issues)</td>
+<td>short derived summary; full body is fetched + analyzed ephemerally,
+never stored (D-013)</td>
+</tr>
+<tr>
+<td><code>author</code></td>
+<td>text null</td>
+<td>byline when present; enables future author-level reputation
+(D-014)</td>
 </tr>
 <tr>
 <td><code>embedding</code></td>
@@ -285,12 +292,83 @@ news</h3>
 </table>
 <blockquote>
 <p>We store a <strong>summary</strong>, not full article text — respects
-source copyright and keeps the DB lean. The original is always
-linked.</p>
+source copyright and keeps the DB lean. The original is always linked.
+The crew fetches the full body <em>ephemerally</em> at analysis time
+(D-013); it is never persisted.</p>
+</blockquote>
+<h3 id="sources-outlet-reputation-memory-d-014"><code>sources</code> —
+outlet reputation memory (D-014)</h3>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>text PK</td>
+<td>outlet name; matches <code>articles.source</code></td>
+</tr>
+<tr>
+<td><code>article_count</code></td>
+<td>int default 0</td>
+<td>articles seen from this outlet</td>
+</tr>
+<tr>
+<td><code>lean_left</code></td>
+<td>int default 0</td>
+<td>running tally of left-rated articles</td>
+</tr>
+<tr>
+<td><code>lean_center</code></td>
+<td>int default 0</td>
+<td>running tally of center-rated articles</td>
+</tr>
+<tr>
+<td><code>lean_right</code></td>
+<td>int default 0</td>
+<td>running tally of right-rated articles</td>
+</tr>
+<tr>
+<td><code>divergence_avg</code></td>
+<td>real</td>
+<td>avg distance of this outlet’s framing from the neutral
+synthesis</td>
+</tr>
+<tr>
+<td><code>reliability</code></td>
+<td>real</td>
+<td>0–1 running reliability estimate</td>
+</tr>
+<tr>
+<td><code>updated_at</code></td>
+<td>timestamptz default now</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>The Bias agent reads this as a prior (“this outlet historically leans
+X across N articles”) and updates it after each analysis. Added via
+migration <code>0002</code> in Plan 2. Author-level reputation is
+deferred (D-014).</p>
 </blockquote>
 <h3 id="stories-one-per-clustered-topic"><code>stories</code> — one per
 clustered topic</h3>
 <table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
 <thead>
 <tr>
 <th>Column</th>
@@ -346,12 +424,41 @@ clustered topic</h3>
 <code>bearish</code></td>
 </tr>
 <tr>
+<td><code>impact_score</code></td>
+<td>int</td>
+<td>0–100: economic impact on everyday life (D-012); drives ranking</td>
+</tr>
+<tr>
+<td><code>impact_summary</code></td>
+<td>text</td>
+<td>one-line “why this matters to you” impact chain</td>
+</tr>
+<tr>
+<td><code>affected_regions</code></td>
+<td>text[]</td>
+<td>regions the story economically touches,
+e.g. <code>{Indonesia,Global}</code></td>
+</tr>
+<tr>
+<td><code>region_relevance</code></td>
+<td>real</td>
+<td>0–1: proximity to the configured <code>home_region</code></td>
+</tr>
+<tr>
 <td><code>created_at</code></td>
 <td>timestamptz default now</td>
 <td></td>
 </tr>
 </tbody>
 </table>
+<blockquote>
+<p><strong>Relevance ranking (D-012):</strong> the home page orders
+stories by <code>impact_score × region_relevance</code>, not recency.
+Low-impact noise (celebrity/sports) is scored near 0 and filtered by
+default. <code>home_region</code> lives in engine config (default
+<code>Indonesia</code>), not the DB — so fixed → geo-detected →
+user-chosen is a config change.</p>
+</blockquote>
 <h3 id="briefings-one-per-day"><code>briefings</code> — one per day</h3>
 <table>
 <thead>

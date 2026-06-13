@@ -20,7 +20,11 @@
   🔴 bearish), date.
 - The **beginner layer** rendered by default (`react-markdown`), with a **"Go deeper →"**
   toggle revealing `pro_md`.
-- Below: the day's **top stories** as cards (topic + source-spread mini-bar + sentiment).
+- Below: the day's **top stories** as cards, **ranked by relevance** (`impact_score ×
+  region_relevance`, D-012) — not recency. Each card leads with its **impact chain**
+  ("Iran tension → oil → fuel/inflation") so the *why-it-matters* is visible at a glance.
+- A quiet **"Show everything we filtered"** link reveals the low-impact/off-region noise
+  that was hidden by default — filter, don't censor.
 
 ### Story view
 The signature screen. For one clustered story:

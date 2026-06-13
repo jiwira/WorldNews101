@@ -326,6 +326,12 @@ questions; it <strong>cannot</strong> read internal-only columns like
 RSS/GDELT endpoints — it does not fetch arbitrary URLs derived from
 article content or user input. This closes the SSRF path that would
 otherwise let injected content pull internal URLs.</li>
+<li><strong>Article-body fetching (D-013):</strong> full text is fetched
+only from article URLs that came from the trusted feeds/GDELT, with a
+timeout, a response-size cap, and <strong>no redirects to
+private/internal addresses</strong> (block RFC1918 / localhost /
+link-local). Never fetch URLs found inside article text or user
+questions.</li>
 </ul>
 <h2 id="abuse-cost-controls">8. Abuse &amp; cost controls</h2>
 <ul>

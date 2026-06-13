@@ -11,6 +11,12 @@ economic/geopolitical story, clusters articles that describe the *same* event, e
 how the covering outlets lean (left / center / right), and produces a **neutral AI
 synthesis** focused on **economic impact and the game theory behind events**.
 
+Above all it is a **relevance filter for the information-overloaded** (D-012): it ranks
+every story by *economic impact × geographic proximity to a home region* (default:
+Indonesia), surfacing what touches your wallet and daily life — oil, tariffs, inflation,
+rates — and filtering out noise (celebrity/sports/entertainment). Identity: *world news
+through an Indonesian economic lens.*
+
 It serves two audiences from one product, via a **layered output**:
 - **Beginners** ("finance-blind") get a plain-language *"what this means for you."*
 - **Professionals** get the deeper analysis: incentives, second-order effects, market impact.
@@ -57,6 +63,15 @@ A sequential-with-parallel crew, all on local Ollama models:
 
 **Flow:** `Curator → [Bias + Game-Theory + Markets in parallel] → Editor/Explainer`.
 
+**Relevance (D-012):** the Curator gathers/weights by `home_region` and filters noise; the
+Markets/Editor steps set each story's `impact_score` + `impact_summary` ("why this matters
+to you"). Stories rank by `impact_score × region_relevance`, not recency.
+
+**Content (D-013):** the crew analyzes each article's **full body** (fetched ephemerally,
+not stored — only summaries persist); clustering uses title+lead. **Source memory (D-014):**
+the Bias agent reads + updates a `sources` reputation table so lean ratings reflect a track
+record, not a one-shot guess.
+
 The **same crew** powers both modes. For a daily briefing the Curator clusters the day's
 headlines; for a question it gathers and clusters news about that specific topic.
 
@@ -66,8 +81,9 @@ headlines; for a question it gathers and clusters news about that specific topic
 
 ## 5. Data sources (all free, no API key)
 
-- **RSS feeds** — curated cross-region list (Reuters, AP, BBC, Al Jazeera, CNBC, plus
-  regional/Indonesian + Asian outlets) for reliable, attributed coverage.
+- **RSS feeds** — international (Reuters, AP, BBC, Al Jazeera, CNBC) **plus Indonesian
+  outlets** (Antara, Kompas, Detik, Kontan, CNBC Indonesia, Jakarta Post) weighted highest
+  for the home-region angle (D-012), plus regional/Asian sources.
 - **GDELT** — free global news-event database/API for breadth ("news from around countries").
 - **Markets context** — free, no-key sources (e.g. Frankfurter for FX, a free quotes feed)
   so the Markets Analyst can ground claims in real numbers.
@@ -99,14 +115,20 @@ site**. Ollama, n8n, and Postgres stay private — no inbound ports. Full ration
 ## 8. Data model (overview — full detail in `docs/02-DATABASE.md`)
 
 - `articles` — ingested news item + embedding + `cluster_id` + AI `lean` rating.
-- `stories` — one per cluster: topic, source spread, neutral synthesis, layers, sentiment.
+- `stories` — one per cluster: topic, source spread, neutral synthesis, layers, sentiment,
+  plus relevance fields (`impact_score`, `impact_summary`, `affected_regions`,
+  `region_relevance`) per D-012.
 - `briefings` — one per day: headline, overall sentiment, layers, the stories it includes.
 - `questions` — on-demand: question text, status (`pending→processing→done→error`), layers.
 - `agent_runs` *(optional)* — run metadata + Phoenix trace link, for the developer view.
+- `sources` — per-outlet **reputation memory** (lean history, reliability, divergence) the
+  Bias agent reads + updates (D-014); `articles.author` captured when present.
 
 ## 9. Website (overview — full detail in `docs/04-UI-UX.md`)
 
-- **Home** — today's briefing; sentiment badge; beginner layer + "Go deeper →".
+- **Home** — today's briefing; sentiment badge; beginner layer + "Go deeper →". Stories
+  ranked by relevance (impact × region), each leading with its impact chain; a quiet
+  "show everything we filtered" reveals the hidden noise.
 - **Story view** — the source-spread bar (e.g. *"14 outlets · 5 left / 6 center / 3 right"*)
   + neutral synthesis + economic impact + source links.
 - **Ask** — question box → honest *"🤖 agents are analyzing…"* state → layered answer.

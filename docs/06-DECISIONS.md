@@ -85,6 +85,49 @@
 - **Consequence:** The data foundation is independent and testable on its own; one SQL
   source of truth; Drizzle stays a typed query layer, not the schema owner.
 
+### D-012 — Relevance & impact engine (economic impact × geographic proximity)
+- **Problem:** Information overload. Users don't need *all* news — they need the news that
+  actually matters to their economic life. Celebrity/sports/entertainment is noise; an
+  Iran story (→ oil → fuel/inflation) or a tariff war (→ cost of living) is signal.
+- **Decision:** Rank every clustered story by **relevance = economic-impact × geographic
+  proximity to a home region**. Two transparent, explainable rules:
+  1. **Economic impact** — an `impact_score` (0–100): does this affect prices, jobs, rates,
+     cost of living, savings? Low-impact categories are filtered out by default.
+  2. **Geographic relevance** — a configurable **`home_region` (default: Indonesia)**.
+     Curation weights Local (Indonesia) > Regional (ASEAN/Asia) > Global-high-impact, and
+     drops global news that doesn't reach the home region economically.
+  Identity: *"world news through an Indonesian economic lens."*
+- **Safeguards (trust):** always show *why* a story ranks high ("oil → inflation"); offer a
+  quiet "show everything we filtered" — filter by default, never silently censor.
+- **Scope:** `home_region` is a **config value**, not hardcoded — so fixed-Indonesia →
+  IP-geo-detected (v1.5) → user-chosen (v2, needs accounts) is a one-line change. True
+  personal relevance is deferred.
+- **Consequence:** new story fields `impact_score`, `impact_summary`, `affected_regions`,
+  `region_relevance`; Indonesian news sources added; the Curator weights by region and the
+  Editor adds the local angle; the home page ranks by relevance, not recency.
+
+### D-013 — Analyze full article content (ephemeral), store summaries only
+- **Problem:** Titles + RSS snippets are too shallow for real bias/impact analysis, but
+  storing full article text raises copyright + bloat concerns (D-009).
+- **Decision:** At analysis time, fetch + extract each article's **full body** (e.g.
+  trafilatura/readability) and feed it to the crew. Persist only a derived summary + the
+  source URL — never full copyrighted text. Embedding/clustering uses title + lead (cheap,
+  sufficient); the deep analysis uses the full body (quality where it matters).
+- **Consequence:** grounded analysis; D-009 still holds. Adds an extraction step + more
+  tokens for the local 14B model (free, just slower). SSRF: only fetch article URLs that
+  came from trusted feeds, with size/redirect limits (05-SECURITY §7).
+
+### D-014 — Source-reputation memory (track outlets over time); author-level deferred
+- **Problem:** Per-article bias ratings are one-shot guesses — inconsistent, hard to defend.
+- **Decision:** Accumulate per-outlet reputation in a `sources` table: historical lean
+  distribution, article count, how often the outlet's framing diverges from the neutral
+  synthesis, reliability. The Bias agent reads this as a prior and updates it after each
+  analysis. Turns bias from a vibe into a track record (strengthens D-007).
+  **Author/writer-level** is deferred — bylines are sparse in RSS and per-author data too
+  thin; capture `articles.author` when present to enable it later.
+- **Consequence:** new `sources` table + `articles.author` column; more consistent,
+  defensible bias ("across N articles this outlet leans X"). Added in Plan 2.
+
 ---
 
 *Template for new entries:*

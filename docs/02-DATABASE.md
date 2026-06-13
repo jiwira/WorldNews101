@@ -21,14 +21,32 @@
 | `country` | text null | origin country if known |
 | `published_at` | timestamptz | |
 | `fetched_at` | timestamptz default now | |
-| `summary` | text null | short extract (no full-text copyright issues) |
+| `summary` | text null | short derived summary; full body is fetched + analyzed ephemerally, never stored (D-013) |
+| `author` | text null | byline when present; enables future author-level reputation (D-014) |
 | `embedding` | vector(768) null | from `nomic-embed-text`; via `pgvector` |
 | `cluster_id` | uuid null FK → `stories.id` | set by the clustering step |
 | `lean` | text null | AI assessment: `left` / `center` / `right` |
 | `lean_confidence` | real null | 0–1, the model's stated confidence |
 
 > We store a **summary**, not full article text — respects source copyright and keeps the
-> DB lean. The original is always linked.
+> DB lean. The original is always linked. The crew fetches the full body *ephemerally* at
+> analysis time (D-013); it is never persisted.
+
+### `sources` — outlet reputation memory (D-014)
+| Column | Type | Notes |
+|--------|------|-------|
+| `name` | text PK | outlet name; matches `articles.source` |
+| `article_count` | int default 0 | articles seen from this outlet |
+| `lean_left` | int default 0 | running tally of left-rated articles |
+| `lean_center` | int default 0 | running tally of center-rated articles |
+| `lean_right` | int default 0 | running tally of right-rated articles |
+| `divergence_avg` | real | avg distance of this outlet's framing from the neutral synthesis |
+| `reliability` | real | 0–1 running reliability estimate |
+| `updated_at` | timestamptz default now | |
+
+> The Bias agent reads this as a prior ("this outlet historically leans X across N
+> articles") and updates it after each analysis. Added via migration `0002` in Plan 2.
+> Author-level reputation is deferred (D-014).
 
 ### `stories` — one per clustered topic
 | Column | Type | Notes |
@@ -42,7 +60,16 @@
 | `beginner_md` | text | "what this means for you" |
 | `pro_md` | text | game theory + market impact |
 | `sentiment` | text | `bullish` / `neutral` / `bearish` |
+| `impact_score` | int | 0–100: economic impact on everyday life (D-012); drives ranking |
+| `impact_summary` | text | one-line "why this matters to you" impact chain |
+| `affected_regions` | text[] | regions the story economically touches, e.g. `{Indonesia,Global}` |
+| `region_relevance` | real | 0–1: proximity to the configured `home_region` |
 | `created_at` | timestamptz default now | |
+
+> **Relevance ranking (D-012):** the home page orders stories by
+> `impact_score × region_relevance`, not recency. Low-impact noise (celebrity/sports) is
+> scored near 0 and filtered by default. `home_region` lives in engine config (default
+> `Indonesia`), not the DB — so fixed → geo-detected → user-chosen is a config change.
 
 ### `briefings` — one per day
 | Column | Type | Notes |

@@ -303,6 +303,10 @@ CREATE TABLE IF NOT EXISTS stories (
     beginner_md  text,
     pro_md       text,
     sentiment    text,
+    impact_score     int,        -- 0-100 economic impact, populated in Plan 2 (D-012)
+    impact_summary   text,       -- "why this matters to you" chain
+    affected_regions text[],     -- e.g. {Indonesia,Global}
+    region_relevance real,       -- 0-1 proximity to home_region
     created_at   timestamptz NOT NULL DEFAULT now()
 );
 
@@ -1111,8 +1115,12 @@ With Postgres up and Ollama running with `nomic-embed-text` pulled:
 cd engine && . .venv/bin/activate && python3 -c "
 from worldnews.pipeline import run_all
 print(run_all(
-    rss_feeds=[('https://feeds.reuters.com/reuters/businessNews','Reuters')],
-    gdelt_queries=['inflation'],
+    rss_feeds=[
+        ('https://feeds.reuters.com/reuters/businessNews', 'Reuters'),
+        # Home-region (D-012): add verified Indonesian feed URLs here, weighted highest
+        # for the local angle — e.g. Antara, Kompas, Kontan, CNBC Indonesia.
+    ],
+    gdelt_queries=['inflation', 'Indonesia economy'],
 ))"
 ```
 Expected: a dict like `{'ingested': N, 'embedded': N, 'clusters': M}` with N>0.
@@ -1134,7 +1142,7 @@ Expected: clustered story topics with their article counts.
 - `articles`/`stories` schema matches `docs/02-DATABASE.md` (embedding vector(768), cluster_id FK, lean columns present though populated in Plan 2). ✅
 - pgvector decision (D-004) honored via the `pgvector/pgvector` image + `vector(768)`. ✅
 - SQL-migrations-as-source-of-truth (D-011) honored. ✅
-- Out of Plan 1 scope (correctly deferred): bias/lean population, neutral/beginner/pro text, briefings — these need the crew (Plan 2). The `lean`, `neutral_md`, etc. columns exist but stay null until then. Noted, not a gap.
+- Out of Plan 1 scope (correctly deferred): bias/lean population, neutral/beginner/pro text, impact/region scoring (D-012), briefings — these need the crew (Plan 2). The `lean`, `neutral_md`, `impact_score`, `region_relevance`, etc. columns exist but stay null until then. Noted, not a gap.
 
 **Placeholder scan:** No TBD/TODO; every code step has complete, runnable code; commands have expected output. ✅
 

@@ -208,9 +208,11 @@ WorldNews.jiwira.com.</p>
 [Cluster]  group similar embeddings ──► assign `cluster_id`, create `stories` rows
    │
    ▼
-[Analyze]  for each significant cluster, run the CrewAI crew:
+[Analyze]  fetch each article&#39;s FULL body (ephemeral, not stored — D-013), then
+           run the CrewAI crew on the full text:
               Curator → [Bias ‖ Game-Theory ‖ Markets] → Editor/Explainer
-           writes neutral_md / beginner_md / pro_md / lean_spread / sentiment
+           Bias reads + updates `sources` reputation (D-014); Editor writes
+           neutral_md / beginner_md / pro_md / lean_spread / sentiment / impact_score
    │
    ▼
 [Compose]  Editor builds the day&#39;s `briefings` row from the top stories
@@ -258,6 +260,26 @@ different outlets.</li>
 <p>This is why <code>nomic-embed-text</code> is essential: clustering is
 <em>the</em> feature that turns “a pile of articles” into “one story,
 many viewpoints.”</p>
+<h2 id="relevance-impact-ranking-d-012">3.5 Relevance &amp; impact
+ranking (D-012)</h2>
+<p>After clustering, every story is scored on <strong>two transparent
+axes</strong> and ranked by their product — this is what turns “all the
+news” into “the news that matters to you”:</p>
+<pre><code>relevance = impact_score (0–100)  ×  region_relevance (0–1)
+            economic impact            proximity to home_region (default: Indonesia)</code></pre>
+<ul>
+<li><strong>Economic impact</strong> — does it move prices, jobs, rates,
+cost of living, savings? Celebrity/sports/entertainment → ~0 → filtered
+out by default. Iran→oil, tariffs, rate decisions → high.</li>
+<li><strong>Geographic relevance</strong> — Local (Indonesia) &gt;
+Regional (ASEAN/Asia) &gt; Global-high-impact; global news that doesn’t
+reach Indonesia economically is dropped.</li>
+</ul>
+<p>The Curator weights gathering by <code>home_region</code>; the Editor
+writes the <code>impact_summary</code> (“why this matters to you”) and
+the local angle. The home page sorts by relevance, not recency. Trust
+safeguards: show <em>why</em> each story ranks (impact chain) and offer
+“show everything we filtered.”</p>
 <h2 id="data-sources-all-free-no-api-key">4. Data sources (all free, no
 API key)</h2>
 <table>
@@ -275,16 +297,22 @@ API key)</h2>
 </thead>
 <tbody>
 <tr>
-<td><strong>RSS</strong> (Reuters, AP, BBC, Al Jazeera, CNBC,
-regional/Indonesian + Asian)</td>
-<td>Reliable attributed coverage</td>
-<td>Free, stable, easy to parse, named outlets enable lean analysis</td>
+<td><strong>International RSS</strong> (Reuters, AP, BBC, Al Jazeera,
+CNBC)</td>
+<td>Reliable attributed global coverage</td>
+<td>Free, stable, named outlets enable lean analysis</td>
+</tr>
+<tr>
+<td><strong>Indonesian RSS</strong> (Antara, Kompas, Detik, Kontan,
+Bisnis, CNBC Indonesia, Jakarta Post)</td>
+<td>Home-region coverage (D-012)</td>
+<td>Weighted highest; gives the local economic angle</td>
 </tr>
 <tr>
 <td><strong>GDELT</strong></td>
-<td>Breadth across countries</td>
-<td>Free global event database — “news from around the world” without
-paid feeds</td>
+<td>Breadth across countries; <code>sourcecountry</code> filter</td>
+<td>Free global event database — “news from around the world”; the
+country filter feeds region weighting</td>
 </tr>
 <tr>
 <td><strong>Frankfurter / free quotes</strong></td>
@@ -344,5 +372,11 @@ once.</li>
 </tr>
 </tbody>
 </table>
+<ul>
+<li><strong>Concrete entrypoint:</strong>
+<code>engine/worldnews/pipeline.py::run_all(rss_feeds, gdelt_queries)</code>
+runs ingest → embed → cluster. RSS feed list + GDELT queries are passed
+in by the caller (n8n in Plan 2).</li>
+</ul>
 </body>
 </html>

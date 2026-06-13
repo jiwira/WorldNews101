@@ -344,6 +344,79 @@ exist before the data pipeline); duplicating the schema in two ORMs
 testable on its own; one SQL source of truth; Drizzle stays a typed
 query layer, not the schema owner.</li>
 </ul>
+<h3
+id="d-012-relevance-impact-engine-economic-impact-geographic-proximity">D-012
+— Relevance &amp; impact engine (economic impact × geographic
+proximity)</h3>
+<ul>
+<li><strong>Problem:</strong> Information overload. Users don’t need
+<em>all</em> news — they need the news that actually matters to their
+economic life. Celebrity/sports/entertainment is noise; an Iran story (→
+oil → fuel/inflation) or a tariff war (→ cost of living) is signal.</li>
+<li><strong>Decision:</strong> Rank every clustered story by
+<strong>relevance = economic-impact × geographic proximity to a home
+region</strong>. Two transparent, explainable rules:
+<ol type="1">
+<li><strong>Economic impact</strong> — an <code>impact_score</code>
+(0–100): does this affect prices, jobs, rates, cost of living, savings?
+Low-impact categories are filtered out by default.</li>
+<li><strong>Geographic relevance</strong> — a configurable
+<strong><code>home_region</code> (default: Indonesia)</strong>. Curation
+weights Local (Indonesia) &gt; Regional (ASEAN/Asia) &gt;
+Global-high-impact, and drops global news that doesn’t reach the home
+region economically. Identity: <em>“world news through an Indonesian
+economic lens.”</em></li>
+</ol></li>
+<li><strong>Safeguards (trust):</strong> always show <em>why</em> a
+story ranks high (“oil → inflation”); offer a quiet “show everything we
+filtered” — filter by default, never silently censor.</li>
+<li><strong>Scope:</strong> <code>home_region</code> is a <strong>config
+value</strong>, not hardcoded — so fixed-Indonesia → IP-geo-detected
+(v1.5) → user-chosen (v2, needs accounts) is a one-line change. True
+personal relevance is deferred.</li>
+<li><strong>Consequence:</strong> new story fields
+<code>impact_score</code>, <code>impact_summary</code>,
+<code>affected_regions</code>, <code>region_relevance</code>; Indonesian
+news sources added; the Curator weights by region and the Editor adds
+the local angle; the home page ranks by relevance, not recency.</li>
+</ul>
+<h3
+id="d-013-analyze-full-article-content-ephemeral-store-summaries-only">D-013
+— Analyze full article content (ephemeral), store summaries only</h3>
+<ul>
+<li><strong>Problem:</strong> Titles + RSS snippets are too shallow for
+real bias/impact analysis, but storing full article text raises
+copyright + bloat concerns (D-009).</li>
+<li><strong>Decision:</strong> At analysis time, fetch + extract each
+article’s <strong>full body</strong> (e.g. trafilatura/readability) and
+feed it to the crew. Persist only a derived summary + the source URL —
+never full copyrighted text. Embedding/clustering uses title + lead
+(cheap, sufficient); the deep analysis uses the full body (quality where
+it matters).</li>
+<li><strong>Consequence:</strong> grounded analysis; D-009 still holds.
+Adds an extraction step + more tokens for the local 14B model (free,
+just slower). SSRF: only fetch article URLs that came from trusted
+feeds, with size/redirect limits (05-SECURITY §7).</li>
+</ul>
+<h3
+id="d-014-source-reputation-memory-track-outlets-over-time-author-level-deferred">D-014
+— Source-reputation memory (track outlets over time); author-level
+deferred</h3>
+<ul>
+<li><strong>Problem:</strong> Per-article bias ratings are one-shot
+guesses — inconsistent, hard to defend.</li>
+<li><strong>Decision:</strong> Accumulate per-outlet reputation in a
+<code>sources</code> table: historical lean distribution, article count,
+how often the outlet’s framing diverges from the neutral synthesis,
+reliability. The Bias agent reads this as a prior and updates it after
+each analysis. Turns bias from a vibe into a track record (strengthens
+D-007). <strong>Author/writer-level</strong> is deferred — bylines are
+sparse in RSS and per-author data too thin; capture
+<code>articles.author</code> when present to enable it later.</li>
+<li><strong>Consequence:</strong> new <code>sources</code> table +
+<code>articles.author</code> column; more consistent, defensible bias
+(“across N articles this outlet leans X”). Added in Plan 2.</li>
+</ul>
 <hr />
 <p><em>Template for new entries:</em></p>
 <pre><code>### D-0NN — &lt;title&gt;

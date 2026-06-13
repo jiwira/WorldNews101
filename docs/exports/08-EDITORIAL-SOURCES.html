@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>08-EDITORIAL-SOURCES</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <style>
+    body{max-width:820px;margin:2.5rem auto;padding:0 1.25rem;
+         font:16px/1.7 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#1a1a1a}
+    h1,h2,h3{line-height:1.25;margin-top:2rem;color:#0b1f3a}
+    h1{border-bottom:2px solid #0b1f3a;padding-bottom:.3rem}
+    code{background:#f3f4f6;padding:.1rem .35rem;border-radius:4px;font-size:.9em}
+    pre{background:#0b1f3a;color:#e6edf3;padding:1rem;border-radius:8px;overflow:auto}
+    pre code{background:none;color:inherit;padding:0}
+    table{border-collapse:collapse;width:100%;margin:1rem 0}
+    th,td{border:1px solid #d0d7de;padding:.5rem .7rem;text-align:left;vertical-align:top}
+    th{background:#f3f4f6}
+    blockquote{border-left:4px solid #0b1f3a;margin:1rem 0;padding:.2rem 1rem;color:#444;background:#f8fafc}
+    a{color:#0b5fff}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">08-EDITORIAL-SOURCES</h1>
+</header>
+<h1 id="editorial-sources-selection-config">08 — Editorial Sources &amp;
+Selection Config</h1>
+<blockquote>
+<p>The concrete “what news do we pull, and what counts as relevant”
+config (D-012/D-013/D-014). Drops into the daily run
+(<code>run_all(rss_feeds, gdelt_queries)</code> + the crew).
+<strong>Feed URLs must be validated before first use</strong> — outlets
+change/retire RSS endpoints.</p>
+</blockquote>
+<h2 id="home-region-thresholds">1. Home region &amp; thresholds</h2>
+<table>
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 30%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>home_region</code></td>
+<td><code>Indonesia</code></td>
+<td>config, not hardcoded (D-012)</td>
+</tr>
+<tr>
+<td><code>min_impact_score</code></td>
+<td><code>25</code> (start)</td>
+<td>stories below this are filtered from the default feed; tune after
+watching real output</td>
+</tr>
+<tr>
+<td>regional neighbors</td>
+<td>China, Singapore, India, Malaysia, ASEAN</td>
+<td>weighted above global, below local</td>
+</tr>
+</tbody>
+</table>
+<h2 id="rss-feeds-verify-each-url-before-use">2. RSS feeds (verify each
+URL before use)</h2>
+<blockquote>
+<p>⚠️ <strong>Reuters retired most public RSS feeds</strong> — rely on
+the working ones below + GDELT for Reuters-origin breadth. Validate
+every URL with a quick fetch first.</p>
+</blockquote>
+<p><strong>International</strong> | Outlet | Candidate RSS | Status |
+|——–|—————|——–| | BBC Business |
+<code>https://feeds.bbci.co.uk/news/business/rss.xml</code> | usually
+works | | Al Jazeera |
+<code>https://www.aljazeera.com/xml/rss/all.xml</code> | usually works |
+| CNBC (Intl) |
+<code>https://www.cnbc.com/id/100003114/device/rss/rss.html</code> |
+verify | | AP | (no reliable public RSS) | use GDELT instead |</p>
+<p><strong>Indonesia (home region — weighted highest)</strong> | Outlet
+| Candidate RSS | Status | |——–|—————|——–| | Antara (Ekonomi) |
+<code>https://www.antaranews.com/rss/ekonomi</code> | verify | | Detik
+Finance | <code>https://finance.detik.com/rss</code> | verify | | Kompas
+| category RSS (verify current path) | verify | | CNBC Indonesia | site
+RSS (verify current path) | verify | | Kontan / Bisnis | verify current
+paths | verify |</p>
+<blockquote>
+<p>Where an outlet has no working RSS, GDELT’s
+<code>sourcecountry:Indonesia</code> filter covers it.</p>
+</blockquote>
+<h2 id="gdelt-query-seeds-the-breadth-backbone-api-always-works">3.
+GDELT query seeds (the breadth backbone — API always works)</h2>
+<p>Run these via the GDELT doc API; they target Indonesia-relevant
+economic signal:</p>
+<p><strong>Energy &amp; commodities (Indonesia imports fuel, exports
+these):</strong> <code>oil price</code>, <code>OPEC</code>,
+<code>natural gas price</code>, <code>coal price</code>,
+<code>nickel</code>, <code>palm oil</code>, <code>tin price</code></p>
+<p><strong>Monetary &amp; FX:</strong> <code>Bank Indonesia</code>,
+<code>rupiah</code>, <code>Federal Reserve rate</code>,
+<code>inflation Indonesia</code>,
+<code>interest rate decision</code></p>
+<p><strong>Trade &amp; policy:</strong> <code>tariff</code>,
+<code>US China trade</code>, <code>export ban Indonesia</code>,
+<code>Indonesia investment</code>,
+<code>fuel subsidy Indonesia</code></p>
+<p><strong>Macro / geopolitics with economic spillover:</strong>
+<code>Indonesia economy</code>, <code>ASEAN trade</code>,
+<code>commodity prices</code>, <code>supply chain</code>,
+<code>sanctions oil</code></p>
+<blockquote>
+<p>Plus a daily <code>sourcecountry:Indonesia</code> sweep for general
+home-region coverage.</p>
+</blockquote>
+<h2 id="impact-taxonomy-how-the-curatoreditor-score-impact_score">4.
+Impact taxonomy (how the Curator/Editor score
+<code>impact_score</code>)</h2>
+<p><strong>High (60–100) — chosen:</strong> energy/oil, Indonesia’s
+export commodities (nickel/coal/palm oil/tin), monetary
+(BI/Fed/inflation/IDR), trade wars/tariffs, local fiscal policy &amp;
+subsidies, macro shocks (recession/banking/sovereign-debt), sanctions
+affecting commodities.</p>
+<p><strong>Medium (25–59) — included if regionally relevant:</strong>
+broad global macro, large-economy policy with indirect spillover, sector
+news touching Indonesian supply chains.</p>
+<p><strong>Low (0–24) — filtered out (viewable under “show everything we
+filtered”):</strong> celebrity, entertainment, sport, lifestyle,
+crime/human-interest with no economic channel, domestic foreign politics
+with no market impact.</p>
+<p><strong>The litmus test:</strong> <em>can a chain be drawn from this
+event to an Indonesian’s cost of living, job, or savings?</em> If yes →
+score it + write the chain as <code>impact_summary</code>. If no →
+filter.</p>
+<h2 id="worked-examples">5. Worked examples</h2>
+<table>
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 27%" />
+<col style="width: 35%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr>
+<th>Headline</th>
+<th style="text-align: right;">impact_score</th>
+<th style="text-align: right;">region_relevance</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Iran–Israel tension escalates</td>
+<td style="text-align: right;">90</td>
+<td style="text-align: right;">0.8</td>
+<td>oil → fuel → inflation → <strong>top</strong></td>
+</tr>
+<tr>
+<td>China cuts nickel imports</td>
+<td style="text-align: right;">85</td>
+<td style="text-align: right;">0.95</td>
+<td>Indonesia = top nickel producer → <strong>top</strong></td>
+</tr>
+<tr>
+<td>US Fed holds rates</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">0.7</td>
+<td>USD/IDR, BI pressure → <strong>high</strong></td>
+</tr>
+<tr>
+<td>US–China tariff war</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">0.7</td>
+<td>trade reroute, prices → <strong>high</strong></td>
+</tr>
+<tr>
+<td>Hollywood actor divorce</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.1</td>
+<td>no economic channel → <strong>filtered</strong></td>
+</tr>
+<tr>
+<td>European football transfer</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.1</td>
+<td>no Indonesian channel → <strong>filtered</strong></td>
+</tr>
+</tbody>
+</table>
+<h2 id="wiring-once-the-crew-is-built">6. Wiring (once the crew is
+built)</h2>
+<ul>
+<li>Pass §2 feeds + §3 queries into
+<code>pipeline.run_all(rss_feeds, gdelt_queries)</code> (Plan 1).</li>
+<li>The crew (Plan 2) scores <code>impact_score</code> per §4 and
+weights region per §1.</li>
+<li>n8n’s daily workflow (Plan 2 Task 8) calls the run with this config
+on a 06:00 cron.</li>
+<li><code>min_impact_score</code> lives in <code>CrewConfig</code> (Plan
+2 Task 1).</li>
+</ul>
+</body>
+</html>
