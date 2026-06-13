@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"><channel>
+  <title>Test Wire</title>
+  <item>
+    <title>Central bank raises rates</title>
+    <link>https://example.com/a1</link>
+    <description>The central bank raised its benchmark rate today.</description>
+    <pubDate>Mon, 09 Jun 2026 08:00:00 GMT</pubDate>
+  </item>
+  <item>
+    <title>Commodity prices surge</title>
+    <link>https://example.com/a2</link>
+    <description>Silver and copper rose sharply.</description>
+    <pubDate>Mon, 09 Jun 2026 09:30:00 GMT</pubDate>
+  </item>
+</channel></rss>

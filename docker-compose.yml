@@ -1,0 +1,14 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: worldnews
+      POSTGRES_PASSWORD: worldnews
+      POSTGRES_DB: worldnews
+    ports:
+      - "127.0.0.1:5433:5432"   # bound to localhost only — never public (see 05-SECURITY)
+    volumes:
+      - worldnews_pg:/var/lib/postgresql/data
+
+volumes:
+  worldnews_pg:
