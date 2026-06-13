@@ -72,6 +72,19 @@
   routine.
 - **Consequence:** `docs/` alone is enough to understand and rebuild the system.
 
+### D-011 — Schema source-of-truth is SQL migrations; Drizzle adopts via introspection
+- **Problem:** Both the Python engine (ingestion/clustering/crew) and the Next.js website
+  read/write the same Postgres. If Drizzle owns the schema, the Python pipeline can't be
+  built or tested before the website exists — but the build order starts with the data layer.
+- **Decision:** Author the schema as plain **SQL migrations** in `db/migrations/`, applied
+  by a small Python runner. The website (Plan 3) generates its typed Drizzle schema from
+  the live DB with `drizzle-kit pull`. Postgres runs from the `pgvector/pgvector` image so
+  the `vector` type is available.
+- **Rejected:** Drizzle-first (forces the frontend to exist before the data pipeline);
+  duplicating the schema in two ORMs (drift risk).
+- **Consequence:** The data foundation is independent and testable on its own; one SQL
+  source of truth; Drizzle stays a typed query layer, not the schema owner.
+
 ---
 
 *Template for new entries:*
