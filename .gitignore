@@ -1,0 +1,23 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Cloudflare tunnel credentials
+*.cloudflared
+cert.pem
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+.next/
+
+# DB dumps
+*.sql.gz
+
+# OS
+.DS_Store

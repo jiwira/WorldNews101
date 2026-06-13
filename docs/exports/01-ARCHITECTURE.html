@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>01-ARCHITECTURE</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <style>
+    body{max-width:820px;margin:2.5rem auto;padding:0 1.25rem;
+         font:16px/1.7 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#1a1a1a}
+    h1,h2,h3{line-height:1.25;margin-top:2rem;color:#0b1f3a}
+    h1{border-bottom:2px solid #0b1f3a;padding-bottom:.3rem}
+    code{background:#f3f4f6;padding:.1rem .35rem;border-radius:4px;font-size:.9em}
+    pre{background:#0b1f3a;color:#e6edf3;padding:1rem;border-radius:8px;overflow:auto}
+    pre code{background:none;color:inherit;padding:0}
+    table{border-collapse:collapse;width:100%;margin:1rem 0}
+    th,td{border:1px solid #d0d7de;padding:.5rem .7rem;text-align:left;vertical-align:top}
+    th{background:#f3f4f6}
+    blockquote{border-left:4px solid #0b1f3a;margin:1rem 0;padding:.2rem 1rem;color:#444;background:#f8fafc}
+    a{color:#0b5fff}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">01-ARCHITECTURE</h1>
+</header>
+<h1 id="architecture">01 — Architecture</h1>
+<blockquote>
+<p>Audience: a future programmer who needs to understand <em>how the
+system is shaped and why</em>. Every major choice here has a rationale
+and a rejected alternative.</p>
+</blockquote>
+<h2 id="the-big-picture">1. The big picture</h2>
+<pre><code>        Internet ──► Cloudflare ──► [Cloudflare Tunnel] ──┐
+   (WorldNews.jiwira.com · SSL · DDoS · cache)             │ exposes ONLY the website
+                                                           ▼
+   ┌────────────────── RTX 5070 Ti box (all local) ──────────────────────┐
+   │                                                                      │
+   │   Next.js site ──tRPC──► (server)                                    │
+   │        ▲                    │                                        │
+   │        │ reads              │ reads/writes                           │
+   │        └────────────► Postgres (Drizzle) ◄──────────┐                │
+   │                                                      │ write briefings│
+   │                                                      │ poll questions │
+   │                          n8n (cron + glue) ──────────┤                │
+   │                                │ HTTP                │                │
+   │                                ▼                     │                │
+   │                      CrewAI service (FastAPI)  ──────┘                │
+   │                                │                                      │
+   │                                ▼                                      │
+   │                      Ollama (qwen2.5 / nomic-embed)                   │
+   │                                │ traces                               │
+   │                                ▼                                      │
+   │                      Phoenix (developer view, private)               │
+   └──────────────────────────────────────────────────────────────────────┘</code></pre>
+<h2
+id="the-defining-decision-decoupled-via-a-content-store-approach-a">2.
+The defining decision: decoupled via a content store (Approach A)</h2>
+<p><strong>The website and the agents never call each other directly.
+They meet at Postgres.</strong></p>
+<ul>
+<li><strong>Daily:</strong> n8n cron triggers the crew → the crew writes
+the finished briefing and stories into Postgres → the website simply
+reads them.</li>
+<li><strong>On-demand:</strong> the website inserts a question row with
+<code>status='pending'</code> → the local crew runner
+<strong>polls</strong> for pending rows → runs → writes the answer back
+→ the website shows it (polling/refresh on the client).</li>
+</ul>
+<h3 id="why-rationale">Why (rationale)</h3>
+<ul>
+<li><strong>The site is always fast.</strong> It only ever does cheap DB
+reads/writes; it is never blocked waiting on multi-minute local-LLM
+inference.</li>
+<li><strong>Each piece is independently testable.</strong> Ingestion,
+clustering, the crew, and the site can each be exercised in isolation
+against the DB contract.</li>
+<li><strong>It’s the honest showcase.</strong> A user sees a snappy
+site; a developer sees real async agent work in Phoenix. Both stories
+are true at once.</li>
+<li><strong>Security falls out for free</strong> (see §4): the agents
+never need an inbound network path.</li>
+</ul>
+<h3 id="alternatives-considered-rejected">Alternatives considered &amp;
+rejected</h3>
+<table>
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 63%" />
+</colgroup>
+<thead>
+<tr>
+<th>Option</th>
+<th>Why rejected</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>B — Website calls the crew API directly</strong></td>
+<td>Couples the public site to slow LLM calls → bad UX, timeouts; n8n
+barely used, weakening the showcase.</td>
+</tr>
+<tr>
+<td><strong>C — n8n serves everything via webhooks</strong></td>
+<td>Using n8n as the backend for a <em>public</em> site is fragile and
+off-label; hard to make “presentable.”</td>
+</tr>
+</tbody>
+</table>
+<h2 id="components-each-what-it-does-how-its-used-what-it-depends-on">3.
+Components (each: what it does / how it’s used / what it depends
+on)</h2>
+<ul>
+<li><strong>Next.js site + tRPC</strong> — <em>what:</em> renders pages,
+exposes type-safe procedures for reading briefings/stories and
+submitting questions. <em>Depends on:</em> Postgres only.</li>
+<li><strong>Postgres (Drizzle)</strong> — <em>what:</em> the single
+source of truth and the integration point between site and agents.
+<em>Depends on:</em> nothing. See <code>02-DATABASE.md</code>.</li>
+<li><strong>n8n</strong> — <em>what:</em> the daily cron trigger and the
+glue (kick off crew runs, move data). <em>Depends on:</em> the CrewAI
+service + Postgres.</li>
+<li><strong>CrewAI service (FastAPI)</strong> — <em>what:</em> wraps the
+crew so it can be invoked over local HTTP and run as a background job;
+also hosts the question-poller. <em>Depends on:</em> Ollama, Postgres.
+See <code>03-DATA-FLOW.md</code>.</li>
+<li><strong>Ollama</strong> — <em>what:</em> serves the local models
+(<code>qwen2.5:14b/7b</code>, <code>nomic-embed-text</code>).
+<em>Depends on:</em> the GPU. Never exposed.</li>
+<li><strong>Phoenix</strong> — <em>what:</em> developer-facing trace UI
+for agent runs. <em>Depends on:</em> nothing; receives OpenTelemetry
+traces from the crew. Private.</li>
+</ul>
+<h2 id="why-this-architecture-is-also-the-security-architecture">4. Why
+this architecture is also the security architecture</h2>
+<p>Because the agents only ever <em>reach out</em> to Postgres (write
+briefings, poll questions), <strong>no inbound connection to
+Ollama/n8n/the crew is ever required.</strong> Cloudflare Tunnel then
+exposes <em>only</em> the Next.js site. The attack surface visible to
+the internet is one Next.js app behind Cloudflare — not the LLM, not
+n8n, not the database. Detail in <code>05-SECURITY.md</code>.</p>
+<h2 id="why-these-model-assignments">5. Why these model assignments</h2>
+<p>16GB VRAM on the RTX 5070 Ti makes <code>qwen2.5:14b</code> (~9GB)
+the sweet spot: the strongest <em>reasoning</em> model that still fits
+comfortably for responsive multi-agent runs. Therefore: -
+<strong>Reasoning-heavy agents</strong> (Bias, Game-Theory, Markets,
+Editor) → <code>qwen2.5:14b</code>. - <strong>Fast triage</strong>
+(Curator’s selection pass) → <code>qwen2.5:7b</code>. -
+<strong>Clustering</strong> → <code>nomic-embed-text</code> (embeddings,
+cheap, purpose-built).</p>
+<p>Rejected: a single 32B quant — tighter on VRAM and slower per agent,
+hurting the multi-agent responsiveness that makes the demo
+compelling.</p>
+<h2 id="failure-modes-designed-for">6. Failure modes (designed-for)</h2>
+<ul>
+<li><strong>Box offline:</strong> daily briefings are cached in Postgres
+and stay readable; only live Q&amp;A is unavailable. The Ask page
+degrades to “agents are offline, try later.”</li>
+<li><strong>Crew run fails:</strong> the question row goes to
+<code>status='error'</code> with a message; the site shows a graceful
+failure, not a spinner forever.</li>
+<li><strong>Model OOM / slow:</strong> queue depth is capped; excess
+questions are rejected politely.</li>
+</ul>
+<p>See <code>06-DECISIONS.md</code> for the decision log behind
+these.</p>
+</body>
+</html>

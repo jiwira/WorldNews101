@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>README</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <style>
+    body{max-width:820px;margin:2.5rem auto;padding:0 1.25rem;
+         font:16px/1.7 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#1a1a1a}
+    h1,h2,h3{line-height:1.25;margin-top:2rem;color:#0b1f3a}
+    h1{border-bottom:2px solid #0b1f3a;padding-bottom:.3rem}
+    code{background:#f3f4f6;padding:.1rem .35rem;border-radius:4px;font-size:.9em}
+    pre{background:#0b1f3a;color:#e6edf3;padding:1rem;border-radius:8px;overflow:auto}
+    pre code{background:none;color:inherit;padding:0}
+    table{border-collapse:collapse;width:100%;margin:1rem 0}
+    th,td{border:1px solid #d0d7de;padding:.5rem .7rem;text-align:left;vertical-align:top}
+    th{background:#f3f4f6}
+    blockquote{border-left:4px solid #0b1f3a;margin:1rem 0;padding:.2rem 1rem;color:#444;background:#f8fafc}
+    a{color:#0b5fff}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">README</h1>
+</header>
+<h1 id="worldnews-101">WorldNews-101</h1>
+<p><strong>Cluster the world’s coverage of each story → expose the bias
+spread → explain the economics.</strong></p>
+<p>A public website (<a
+href="https://WorldNews.jiwira.com">WorldNews.jiwira.com</a>) where a
+finance-blind beginner and a working professional both get value from
+the same place:</p>
+<ul>
+<li>A <strong>daily briefing</strong> of what’s moving the world
+economy, with a sentiment read.</li>
+<li><strong>On-demand analysis</strong> — ask <em>“China bought silver —
+why, and what’s the impact?”</em> and get a layered answer
+(plain-language first, deeper analysis below).</li>
+<li>For every story: <strong>how many outlets covered it, where they
+lean (left/center/right), and a neutral AI synthesis</strong> that
+strips the spin and adds the economic impact.</li>
+</ul>
+<p>The product is deliberately simple to <em>use</em>. Underneath, a
+<strong>multi-agent AI system</strong> (n8n + CrewAI + local Ollama
+models on an RTX 5070 Ti) gathers news, clusters it, rates bias, reasons
+about game theory and market impact, and writes the content
+automatically. Users only ever see the website; the developer watches
+the agents work.</p>
+<blockquote>
+<p><strong>This is a portfolio showcase.</strong> The technical story
+(how it’s built) is told in the <code>jiwira-portfolio</code> project.
+This repo is the product + its full documentation.</p>
+</blockquote>
+<h2 id="documentation-read-in-order">Documentation (read in order)</h2>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 76%" />
+</colgroup>
+<thead>
+<tr>
+<th>Doc</th>
+<th>What it covers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="SPEC.md"><code>SPEC.md</code></a></td>
+<td>The full product + technical specification</td>
+</tr>
+<tr>
+<td><a
+href="docs/01-ARCHITECTURE.md"><code>docs/01-ARCHITECTURE.md</code></a></td>
+<td>System architecture and <em>why</em> each choice was made</td>
+</tr>
+<tr>
+<td><a
+href="docs/02-DATABASE.md"><code>docs/02-DATABASE.md</code></a></td>
+<td>Postgres schema (Drizzle), every table and field</td>
+</tr>
+<tr>
+<td><a
+href="docs/03-DATA-FLOW.md"><code>docs/03-DATA-FLOW.md</code></a></td>
+<td>How a story travels from news source to website</td>
+</tr>
+<tr>
+<td><a href="docs/04-UI-UX.md"><code>docs/04-UI-UX.md</code></a></td>
+<td>Pages, components, and the layered-output UX</td>
+</tr>
+<tr>
+<td><a
+href="docs/05-SECURITY.md"><code>docs/05-SECURITY.md</code></a></td>
+<td>Threat model + defenses (incl. prompt injection, pentest)</td>
+</tr>
+<tr>
+<td><a
+href="docs/06-DECISIONS.md"><code>docs/06-DECISIONS.md</code></a></td>
+<td>Decision log — problems faced and solutions chosen</td>
+</tr>
+<tr>
+<td><a
+href="docs/07-DEPLOYMENT.md"><code>docs/07-DEPLOYMENT.md</code></a></td>
+<td>Cloudflare Tunnel + all-local hosting on the RTX box</td>
+</tr>
+</tbody>
+</table>
+<p>HTML and DOCX copies of every doc are generated into <a
+href="docs/exports/"><code>docs/exports/</code></a>.</p>
+<h2 id="status">Status</h2>
+<p><strong>Design + documentation phase.</strong> No application code
+yet — by design. The spec is written first, reviewed, then an
+implementation plan follows. See <code>SPEC.md</code> §11 for the build
+order.</p>
+<h2 id="documentation-discipline">Documentation discipline</h2>
+<p>Every time a component is created or changed, the relevant doc above
+is updated in the same change, and the HTML/DOCX exports are
+regenerated. Docs are a deliverable, not an afterthought — a future
+programmer should be able to understand and rebuild this system from
+<code>docs/</code> alone.</p>
+</body>
+</html>

@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>SPEC</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <style>
+    body{max-width:820px;margin:2.5rem auto;padding:0 1.25rem;
+         font:16px/1.7 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#1a1a1a}
+    h1,h2,h3{line-height:1.25;margin-top:2rem;color:#0b1f3a}
+    h1{border-bottom:2px solid #0b1f3a;padding-bottom:.3rem}
+    code{background:#f3f4f6;padding:.1rem .35rem;border-radius:4px;font-size:.9em}
+    pre{background:#0b1f3a;color:#e6edf3;padding:1rem;border-radius:8px;overflow:auto}
+    pre code{background:none;color:inherit;padding:0}
+    table{border-collapse:collapse;width:100%;margin:1rem 0}
+    th,td{border:1px solid #d0d7de;padding:.5rem .7rem;text-align:left;vertical-align:top}
+    th{background:#f3f4f6}
+    blockquote{border-left:4px solid #0b1f3a;margin:1rem 0;padding:.2rem 1rem;color:#444;background:#f8fafc}
+    a{color:#0b5fff}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">SPEC</h1>
+</header>
+<h1 id="worldnews-101-specification">WorldNews-101 — Specification</h1>
+<p><strong>Status:</strong> Approved design · <strong>Date:</strong>
+2026-06-13 · <strong>Owner:</strong> jiwira</p>
+<hr />
+<h2 id="summary">1. Summary</h2>
+<p>WorldNews-101 is a public website that aggregates global coverage of
+each major economic/geopolitical story, clusters articles that describe
+the <em>same</em> event, exposes how the covering outlets lean (left /
+center / right), and produces a <strong>neutral AI synthesis</strong>
+focused on <strong>economic impact and the game theory behind
+events</strong>.</p>
+<p>It serves two audiences from one product, via a <strong>layered
+output</strong>: - <strong>Beginners</strong> (“finance-blind”) get a
+plain-language <em>“what this means for you.”</em> -
+<strong>Professionals</strong> get the deeper analysis: incentives,
+second-order effects, market impact.</p>
+<p>Two delivery modes share one analysis engine: - <strong>Daily
+briefing</strong> — generated automatically every morning. -
+<strong>On-demand analysis</strong> — a visitor asks a question and gets
+a layered answer.</p>
+<h2 id="goals-non-goals">2. Goals &amp; non-goals</h2>
+<p><strong>Goals</strong> - A clean, fast public site usable by a
+complete novice. - Genuinely useful, <em>neutral</em> economic analysis
+with visible source/bias spread. - Showcase a real multi-agent AI system
+(n8n + CrewAI + local Ollama), watchable by a developer. - Run entirely
+on local hardware (RTX 5070 Ti), free of paid APIs.</p>
+<p><strong>Non-goals (v1 — explicitly deferred, not cut)</strong> - User
+accounts / auth, personalization, portfolio tracking. - Telegram bot and
+email newsletter (later). - Real-time/streaming updates (daily +
+on-demand is enough). - Paid news/market data feeds. - Financial
+<em>advice</em> — this is analysis/education, never “buy/sell”
+recommendations.</p>
+<h2 id="audiences-the-layered-output-principle">3. Audiences &amp; the
+layered-output principle</h2>
+<p>Every piece of generated content has two layers stored separately: -
+<code>beginner_md</code> — short, jargon-free, “why should I care.” -
+<code>pro_md</code> — full analysis: game theory, incentives, market
+impact, caveats.</p>
+<p>The UI shows the beginner layer by default with a <strong>“Go deeper
+→”</strong> toggle to the pro layer. This is how one product serves both
+audiences without branching into two.</p>
+<h2 id="the-analysis-engine-crewai-crew">4. The analysis engine (CrewAI
+crew)</h2>
+<p>A sequential-with-parallel crew, all on local Ollama models:</p>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 53%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr>
+<th>Agent</th>
+<th>Responsibility</th>
+<th>Model</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Curator</strong></td>
+<td>Gather articles; embed them; <strong>cluster by story</strong>; pick
+what matters</td>
+<td><code>nomic-embed-text</code> + <code>qwen2.5:7b</code></td>
+</tr>
+<tr>
+<td><strong>Bias &amp; Framing Analyst</strong></td>
+<td>Per source in a cluster: political lean (L/C/R) + economic framing;
+how framing differs</td>
+<td><code>qwen2.5:14b</code></td>
+</tr>
+<tr>
+<td><strong>Game-Theory Analyst</strong></td>
+<td><em>Why</em> are the actors doing this? Incentives, power dynamics,
+second-order effects</td>
+<td><code>qwen2.5:14b</code></td>
+</tr>
+<tr>
+<td><strong>Markets Analyst</strong></td>
+<td>Impact on currencies, commodities, sectors, specific economies
+(grounded in real numbers)</td>
+<td><code>qwen2.5:14b</code></td>
+</tr>
+<tr>
+<td><strong>Editor / Explainer</strong></td>
+<td>Neutral synthesis; produces <code>beginner_md</code> +
+<code>pro_md</code>; sets headline + sentiment; enforces economic-only
+scope</td>
+<td><code>qwen2.5:14b</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Flow:</strong>
+<code>Curator → [Bias + Game-Theory + Markets in parallel] → Editor/Explainer</code>.</p>
+<p>The <strong>same crew</strong> powers both modes. For a daily
+briefing the Curator clusters the day’s headlines; for a question it
+gathers and clusters news about that specific topic.</p>
+<blockquote>
+<p><strong>Credibility rule (non-negotiable):</strong> bias/lean ratings
+and the “neutral perspective” are always labeled as <strong>AI
+assessment</strong> — the model’s read of framing, not objective truth.
+See <code>docs/05-SECURITY.md</code> §Trust &amp; abuse and
+<code>docs/06-DECISIONS.md</code> D-007.</p>
+</blockquote>
+<h2 id="data-sources-all-free-no-api-key">5. Data sources (all free, no
+API key)</h2>
+<ul>
+<li><strong>RSS feeds</strong> — curated cross-region list (Reuters, AP,
+BBC, Al Jazeera, CNBC, plus regional/Indonesian + Asian outlets) for
+reliable, attributed coverage.</li>
+<li><strong>GDELT</strong> — free global news-event database/API for
+breadth (“news from around countries”).</li>
+<li><strong>Markets context</strong> — free, no-key sources
+(e.g. Frankfurter for FX, a free quotes feed) so the Markets Analyst can
+ground claims in real numbers.</li>
+</ul>
+<p>Full list and rationale in <code>docs/03-DATA-FLOW.md</code>.</p>
+<h2 id="architecture-approach-a-content-store-decoupled">6. Architecture
+(Approach A — content-store decoupled)</h2>
+<p>The website and the agents never call each other directly. They meet
+at <strong>Postgres</strong>.</p>
+<ul>
+<li><strong>Daily:</strong> n8n cron → crew runs → writes briefing +
+stories to Postgres. Site reads it.</li>
+<li><strong>On-demand:</strong> site writes a <code>pending</code>
+question → the local box <strong>polls</strong> Postgres → crew runs →
+writes the answer back → site shows it.</li>
+</ul>
+<p>Everything runs on the <strong>RTX 5070 Ti box</strong>;
+<strong>Cloudflare Tunnel exposes only the Next.js site</strong>.
+Ollama, n8n, and Postgres stay private — no inbound ports. Full
+rationale in <code>docs/01-ARCHITECTURE.md</code>; deployment in
+<code>docs/07-DEPLOYMENT.md</code>.</p>
+<h2 id="tech-stack-consistent-with-jiwira-portfolio">7. Tech stack
+(consistent with jiwira-portfolio)</h2>
+<ul>
+<li><strong>Frontend/server:</strong> Next.js + TypeScript + Tailwind,
+<code>react-markdown</code> for rendering.</li>
+<li><strong>API:</strong> tRPC (type-safe, same as portfolio).</li>
+<li><strong>DB:</strong> Postgres + Drizzle ORM.</li>
+<li><strong>Orchestration:</strong> n8n (Docker, already running).</li>
+<li><strong>Agents:</strong> CrewAI (Python) wrapped in a small FastAPI
+service; local Ollama models.</li>
+<li><strong>Observability:</strong> Phoenix (already running) —
+developer-facing agent traces.</li>
+<li><strong>Edge:</strong> Cloudflare Tunnel (SSL, DDoS protection, no
+open ports).</li>
+</ul>
+<h2 id="data-model-overview-full-detail-in-docs02-database.md">8. Data
+model (overview — full detail in <code>docs/02-DATABASE.md</code>)</h2>
+<ul>
+<li><code>articles</code> — ingested news item + embedding +
+<code>cluster_id</code> + AI <code>lean</code> rating.</li>
+<li><code>stories</code> — one per cluster: topic, source spread,
+neutral synthesis, layers, sentiment.</li>
+<li><code>briefings</code> — one per day: headline, overall sentiment,
+layers, the stories it includes.</li>
+<li><code>questions</code> — on-demand: question text, status
+(<code>pending→processing→done→error</code>), layers.</li>
+<li><code>agent_runs</code> <em>(optional)</em> — run metadata + Phoenix
+trace link, for the developer view.</li>
+</ul>
+<h2 id="website-overview-full-detail-in-docs04-ui-ux.md">9. Website
+(overview — full detail in <code>docs/04-UI-UX.md</code>)</h2>
+<ul>
+<li><strong>Home</strong> — today’s briefing; sentiment badge; beginner
+layer + “Go deeper →”.</li>
+<li><strong>Story view</strong> — the source-spread bar (e.g. <em>“14
+outlets · 5 left / 6 center / 3 right”</em>)
+<ul>
+<li>neutral synthesis + economic impact + source links.</li>
+</ul></li>
+<li><strong>Ask</strong> — question box → honest <em>“🤖 agents are
+analyzing…”</em> state → layered answer.</li>
+<li><strong>Archive</strong> — past daily briefings by date.</li>
+<li><strong>How it works</strong> — the n8n + CrewAI + Ollama showcase,
+linking to the portfolio.</li>
+</ul>
+<h2 id="key-risks-mitigations-summary-full-in-docs05-docs06">10. Key
+risks &amp; mitigations (summary — full in <code>docs/05</code> &amp;
+<code>docs/06</code>)</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 66%" />
+</colgroup>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Bias detection is subjective → credibility attack</td>
+<td>Label everything “AI assessment”; show sources; never assert as
+fact</td>
+</tr>
+<tr>
+<td>Prompt injection via scraped article text</td>
+<td>Treat article text as untrusted data, never instructions; structured
+prompts; output validation</td>
+</tr>
+<tr>
+<td>Public site exposes the home box</td>
+<td>Cloudflare Tunnel exposes <em>only</em> the site; everything else
+private</td>
+</tr>
+<tr>
+<td>On-demand abuse runs up GPU / floods queue</td>
+<td>Rate limiting, input length caps, a queue with backpressure</td>
+</tr>
+<tr>
+<td>Local LLM hallucination in economic claims</td>
+<td>Markets Analyst grounds numbers in fetched data; Editor enforces
+caveats</td>
+</tr>
+<tr>
+<td>Box offline → site degraded</td>
+<td>Briefings cached in Postgres (always readable); only live Q&amp;A
+needs the box up</td>
+</tr>
+</tbody>
+</table>
+<h2 id="build-order-for-the-implementation-plan">11. Build order (for
+the implementation plan)</h2>
+<ol type="1">
+<li><strong>DB + schema</strong> (Drizzle migrations) — the contract
+everything else depends on.</li>
+<li><strong>Ingestion</strong> — RSS + GDELT fetch →
+<code>articles</code> (no AI yet). Verify rows land.</li>
+<li><strong>Clustering</strong> — embeddings via
+<code>nomic-embed-text</code> → <code>cluster_id</code>. Verify
+clusters.</li>
+<li><strong>The crew</strong> — agents + tasks on Ollama; CLI test on
+one cluster; Phoenix traces.</li>
+<li><strong>FastAPI wrapper</strong> + n8n daily cron → writes
+<code>briefings</code>/<code>stories</code>.</li>
+<li><strong>Website</strong> — read-only pages (Home, Story, Archive)
+over the DB.</li>
+<li><strong>On-demand</strong> — Ask page → <code>questions</code> table
+→ local poller → crew → answer.</li>
+<li><strong>Cloudflare Tunnel</strong> + hardening (security checklist
+in <code>docs/05</code>).</li>
+<li><strong>“How it works”</strong> page + portfolio writeup.</li>
+</ol>
+<p>Each step updates the relevant doc and regenerates the HTML/DOCX
+exports.</p>
+<h2 id="success-criteria">12. Success criteria</h2>
+<ul>
+<li>A novice reads today’s briefing and understands what happened and
+why it matters.</li>
+<li>A professional finds the pro layer non-trivial and the source/bias
+spread informative.</li>
+<li>A developer can open Phoenix and watch the five agents reason on a
+real story.</li>
+<li>The whole thing runs on the local box, free, and is reachable at
+WorldNews.jiwira.com.</li>
+</ul>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>06-DECISIONS</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <style>
+    body{max-width:820px;margin:2.5rem auto;padding:0 1.25rem;
+         font:16px/1.7 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#1a1a1a}
+    h1,h2,h3{line-height:1.25;margin-top:2rem;color:#0b1f3a}
+    h1{border-bottom:2px solid #0b1f3a;padding-bottom:.3rem}
+    code{background:#f3f4f6;padding:.1rem .35rem;border-radius:4px;font-size:.9em}
+    pre{background:#0b1f3a;color:#e6edf3;padding:1rem;border-radius:8px;overflow:auto}
+    pre code{background:none;color:inherit;padding:0}
+    table{border-collapse:collapse;width:100%;margin:1rem 0}
+    th,td{border:1px solid #d0d7de;padding:.5rem .7rem;text-align:left;vertical-align:top}
+    th{background:#f3f4f6}
+    blockquote{border-left:4px solid #0b1f3a;margin:1rem 0;padding:.2rem 1rem;color:#444;background:#f8fafc}
+    a{color:#0b5fff}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">06-DECISIONS</h1>
+</header>
+<h1 id="decision-log-problems-solutions">06 — Decision Log (problems
+&amp; solutions)</h1>
+<blockquote>
+<p>Lightweight ADR-style record: each decision, the problem, the choice,
+and the alternatives rejected. New decisions are appended here as the
+project evolves.</p>
+</blockquote>
+<hr />
+<h3 id="d-001-decouple-website-and-agents-via-postgres-approach-a">D-001
+— Decouple website and agents via Postgres (Approach A)</h3>
+<ul>
+<li><strong>Problem:</strong> A public site must be fast, but local
+multi-agent LLM runs take minutes.</li>
+<li><strong>Decision:</strong> Website and agents never call each other;
+they meet at Postgres. Daily briefings are written ahead of time;
+questions are queued and polled.</li>
+<li><strong>Rejected:</strong> Direct API calls (couples site to slow
+LLM); n8n-as-backend (fragile).</li>
+<li><strong>Consequence:</strong> Snappy site, independent testability,
+and no inbound path to the agents.</li>
+</ul>
+<h3
+id="d-002-host-everything-on-the-rtx-box-expose-only-the-site-via-cloudflare-tunnel">D-002
+— Host everything on the RTX box; expose only the site via Cloudflare
+Tunnel</h3>
+<ul>
+<li><strong>Problem:</strong> We want a public URL without exposing a
+home machine or the local LLM.</li>
+<li><strong>Decision:</strong> All services local; Cloudflare Tunnel
+exposes only Next.js. No open ports.</li>
+<li><strong>Rejected:</strong> VPS split (costs money, unneeded now);
+port-forwarding (exposes home IP).</li>
+<li><strong>Consequence:</strong> Site up only when the box is on —
+acceptable “for now”; briefings cached.</li>
+</ul>
+<h3
+id="d-003-multi-source-clustering-bias-spread-is-the-core-feature">D-003
+— Multi-source clustering + bias spread is the core feature</h3>
+<ul>
+<li><strong>Problem:</strong> A plain news summarizer isn’t
+distinctive.</li>
+<li><strong>Decision:</strong> Cluster articles covering the same event,
+show the left/center/right spread, then give a neutral economic
+synthesis (“Ground News × economics, local AI”).</li>
+<li><strong>Consequence:</strong> <code>nomic-embed-text</code> gets an
+essential role (clustering); a Bias &amp; Framing Analyst agent is
+added.</li>
+</ul>
+<h3
+id="d-004-use-pgvector-for-embeddings-with-an-in-python-fallback">D-004
+— Use <code>pgvector</code> for embeddings, with an in-Python
+fallback</h3>
+<ul>
+<li><strong>Problem:</strong> Clustering needs vector similarity
+search.</li>
+<li><strong>Decision:</strong> Store embeddings in Postgres via
+<code>pgvector</code>; cluster with SQL distance.</li>
+<li><strong>Rejected (as primary):</strong> In-memory clustering each
+run — kept as fallback if the extension can’t be installed
+initially.</li>
+<li><strong>Consequence:</strong> One datastore, queryable embeddings;
+revisit if scale grows.</li>
+</ul>
+<h3
+id="d-005-layered-output-beginner_md-pro_md-instead-of-two-products">D-005
+— Layered output (<code>beginner_md</code> + <code>pro_md</code>)
+instead of two products</h3>
+<ul>
+<li><strong>Problem:</strong> Serve both finance-blind beginners and
+professionals.</li>
+<li><strong>Decision:</strong> Every content item stores two layers; UI
+shows beginner by default with a “Go deeper →” toggle.</li>
+<li><strong>Consequence:</strong> One pipeline, one UI, two audiences.
+The Editor agent owns both layers.</li>
+</ul>
+<h3 id="d-006-qwen2.514b-as-the-reasoning-workhorse">D-006 —
+<code>qwen2.5:14b</code> as the reasoning workhorse</h3>
+<ul>
+<li><strong>Problem:</strong> Pick models that fit 16GB VRAM while
+keeping multi-agent runs responsive.</li>
+<li><strong>Decision:</strong> 14b for reasoning agents, 7b for fast
+triage, <code>nomic-embed-text</code> for clustering.</li>
+<li><strong>Rejected:</strong> 32B quant (tighter VRAM, slower per
+agent).</li>
+</ul>
+<h3 id="d-007-label-all-biasneutrality-as-ai-assessment-not-fact">D-007
+— Label all bias/neutrality as “AI assessment,” not fact</h3>
+<ul>
+<li><strong>Problem:</strong> Bias detection is subjective; asserting it
+as truth invites credible attack and is dishonest.</li>
+<li><strong>Decision:</strong> Always label lean ratings and the neutral
+synthesis as the model’s assessment; always show and link sources; add a
+“not financial advice” disclaimer.</li>
+<li><strong>Consequence:</strong> Defensible credibility; this is
+treated as a security concern (05 §9).</li>
+</ul>
+<h3
+id="d-008-agents-have-no-action-tools-prompt-injection-containment">D-008
+— Agents have no action tools (prompt-injection containment)</h3>
+<ul>
+<li><strong>Problem:</strong> Scraped article text and user questions
+are untrusted and may contain injection attempts.</li>
+<li><strong>Decision:</strong> Agents get <strong>no</strong>
+shell/file/arbitrary-HTTP tools; fetching is a fixed allow-listed
+function. Article text is inserted as delimited <em>data</em>, never
+instructions. Output is schema-validated.</li>
+<li><strong>Consequence:</strong> A successful injection can at most
+alter text (which is then validated/rejected) — it cannot take actions
+or reach internal systems.</li>
+</ul>
+<h3 id="d-009-store-article-summaries-links-not-full-text">D-009 — Store
+article <em>summaries</em> + links, not full text</h3>
+<ul>
+<li><strong>Problem:</strong> Copyright and DB bloat from storing full
+articles.</li>
+<li><strong>Decision:</strong> Persist a short summary + the source URL;
+always link out to the original.</li>
+<li><strong>Consequence:</strong> Lower legal/storage risk; readers
+verify at the source.</li>
+</ul>
+<h3
+id="d-010-documentation-is-a-per-change-deliverable-with-htmldocx-exports">D-010
+— Documentation is a per-change deliverable, with HTML/DOCX exports</h3>
+<ul>
+<li><strong>Problem:</strong> Docs rot when treated as an
+afterthought.</li>
+<li><strong>Decision:</strong> Every component created/changed updates
+its doc in the same change; HTML + DOCX exports are regenerated from the
+markdown via the <code>docs/build-exports</code> routine.</li>
+<li><strong>Consequence:</strong> <code>docs/</code> alone is enough to
+understand and rebuild the system.</li>
+</ul>
+<hr />
+<p><em>Template for new entries:</em></p>
+<pre><code>### D-0NN — &lt;title&gt;
+- **Problem:** …
+- **Decision:** …
+- **Rejected:** …
+- **Consequence:** …</code></pre>
+</body>
+</html>

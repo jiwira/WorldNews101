@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>02-DATABASE</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <style>
+    body{max-width:820px;margin:2.5rem auto;padding:0 1.25rem;
+         font:16px/1.7 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#1a1a1a}
+    h1,h2,h3{line-height:1.25;margin-top:2rem;color:#0b1f3a}
+    h1{border-bottom:2px solid #0b1f3a;padding-bottom:.3rem}
+    code{background:#f3f4f6;padding:.1rem .35rem;border-radius:4px;font-size:.9em}
+    pre{background:#0b1f3a;color:#e6edf3;padding:1rem;border-radius:8px;overflow:auto}
+    pre code{background:none;color:inherit;padding:0}
+    table{border-collapse:collapse;width:100%;margin:1rem 0}
+    th,td{border:1px solid #d0d7de;padding:.5rem .7rem;text-align:left;vertical-align:top}
+    th{background:#f3f4f6}
+    blockquote{border-left:4px solid #0b1f3a;margin:1rem 0;padding:.2rem 1rem;color:#444;background:#f8fafc}
+    a{color:#0b5fff}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">02-DATABASE</h1>
+</header>
+<h1 id="database">02 — Database</h1>
+<blockquote>
+<p>Postgres + Drizzle ORM (same stack as jiwira-portfolio). This schema
+is the contract between the website and the agents — define it first,
+change it deliberately.</p>
+</blockquote>
+<h2 id="why-postgres-drizzle">1. Why Postgres + Drizzle</h2>
+<ul>
+<li>Consistency with the portfolio (<code>drizzle-orm</code>,
+<code>pg</code>, migrations already a known tool).</li>
+<li>Postgres handles the JSON, arrays, and (optionally)
+<code>pgvector</code> we need.</li>
+<li>Drizzle gives type-safe queries that flow into tRPC end-to-end.</li>
+</ul>
+<h2 id="tables">2. Tables</h2>
+<h3 id="articles-raw-ingested-news"><code>articles</code> — raw ingested
+news</h3>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>uuid PK</td>
+<td></td>
+</tr>
+<tr>
+<td><code>url</code></td>
+<td>text unique</td>
+<td>dedupe key</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
+<td><code>source</code></td>
+<td>text</td>
+<td>outlet name, e.g. “Reuters”</td>
+</tr>
+<tr>
+<td><code>country</code></td>
+<td>text null</td>
+<td>origin country if known</td>
+</tr>
+<tr>
+<td><code>published_at</code></td>
+<td>timestamptz</td>
+<td></td>
+</tr>
+<tr>
+<td><code>fetched_at</code></td>
+<td>timestamptz default now</td>
+<td></td>
+</tr>
+<tr>
+<td><code>summary</code></td>
+<td>text null</td>
+<td>short extract (no full-text copyright issues)</td>
+</tr>
+<tr>
+<td><code>embedding</code></td>
+<td>vector(768) null</td>
+<td>from <code>nomic-embed-text</code>; via <code>pgvector</code></td>
+</tr>
+<tr>
+<td><code>cluster_id</code></td>
+<td>uuid null FK → <code>stories.id</code></td>
+<td>set by the clustering step</td>
+</tr>
+<tr>
+<td><code>lean</code></td>
+<td>text null</td>
+<td>AI assessment: <code>left</code> / <code>center</code> /
+<code>right</code></td>
+</tr>
+<tr>
+<td><code>lean_confidence</code></td>
+<td>real null</td>
+<td>0–1, the model’s stated confidence</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>We store a <strong>summary</strong>, not full article text — respects
+source copyright and keeps the DB lean. The original is always
+linked.</p>
+</blockquote>
+<h3 id="stories-one-per-clustered-topic"><code>stories</code> — one per
+clustered topic</h3>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>uuid PK</td>
+<td></td>
+</tr>
+<tr>
+<td><code>topic</code></td>
+<td>text</td>
+<td>short canonical title for the event</td>
+</tr>
+<tr>
+<td><code>first_seen</code></td>
+<td>timestamptz</td>
+<td></td>
+</tr>
+<tr>
+<td><code>source_count</code></td>
+<td>int</td>
+<td>number of articles in the cluster</td>
+</tr>
+<tr>
+<td><code>lean_spread</code></td>
+<td>jsonb</td>
+<td>e.g. <code>{"left":5,"center":6,"right":3}</code></td>
+</tr>
+<tr>
+<td><code>neutral_md</code></td>
+<td>text</td>
+<td>AI-neutral synthesis (markdown)</td>
+</tr>
+<tr>
+<td><code>beginner_md</code></td>
+<td>text</td>
+<td>“what this means for you”</td>
+</tr>
+<tr>
+<td><code>pro_md</code></td>
+<td>text</td>
+<td>game theory + market impact</td>
+</tr>
+<tr>
+<td><code>sentiment</code></td>
+<td>text</td>
+<td><code>bullish</code> / <code>neutral</code> /
+<code>bearish</code></td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td>timestamptz default now</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="briefings-one-per-day"><code>briefings</code> — one per day</h3>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>uuid PK</td>
+<td></td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td>date unique</td>
+<td>the briefing day</td>
+</tr>
+<tr>
+<td><code>headline</code></td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
+<td><code>overall_sentiment</code></td>
+<td>text</td>
+<td><code>bullish</code>/<code>neutral</code>/<code>bearish</code></td>
+</tr>
+<tr>
+<td><code>beginner_md</code></td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
+<td><code>pro_md</code></td>
+<td>text</td>
+<td></td>
+</tr>
+<tr>
+<td><code>story_ids</code></td>
+<td>uuid[]</td>
+<td>the stories featured</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>text</td>
+<td><code>draft</code>/<code>published</code></td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td>timestamptz default now</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3
+id="questions-on-demand-analysis-the-pollers-queue"><code>questions</code>
+— on-demand analysis (the poller’s queue)</h3>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>uuid PK</td>
+<td></td>
+</tr>
+<tr>
+<td><code>question</code></td>
+<td>text</td>
+<td>user input (length-capped, sanitized)</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>text</td>
+<td><code>pending</code>→<code>processing</code>→<code>done</code>→<code>error</code></td>
+</tr>
+<tr>
+<td><code>beginner_md</code></td>
+<td>text null</td>
+<td></td>
+</tr>
+<tr>
+<td><code>pro_md</code></td>
+<td>text null</td>
+<td></td>
+</tr>
+<tr>
+<td><code>story_id</code></td>
+<td>uuid null FK</td>
+<td>the cluster built for this question</td>
+</tr>
+<tr>
+<td><code>error</code></td>
+<td>text null</td>
+<td>populated on failure</td>
+</tr>
+<tr>
+<td><code>client_hash</code></td>
+<td>text null</td>
+<td>salted hash of IP for rate limiting (not the IP)</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td>timestamptz default now</td>
+<td></td>
+</tr>
+<tr>
+<td><code>processed_at</code></td>
+<td>timestamptz null</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="agent_runs-optional-developer-view"><code>agent_runs</code>
+<em>(optional, developer view)</em></h3>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>uuid PK</td>
+<td></td>
+</tr>
+<tr>
+<td><code>kind</code></td>
+<td>text</td>
+<td><code>briefing</code> / <code>question</code></td>
+</tr>
+<tr>
+<td><code>ref_id</code></td>
+<td>uuid</td>
+<td>the briefing/question it belongs to</td>
+</tr>
+<tr>
+<td><code>phoenix_trace_url</code></td>
+<td>text null</td>
+<td>link to the trace</td>
+</tr>
+<tr>
+<td><code>tokens</code></td>
+<td>int null</td>
+<td>for cost/usage tracking</td>
+</tr>
+<tr>
+<td><code>duration_ms</code></td>
+<td>int null</td>
+<td></td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td>timestamptz default now</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="status-lifecycles">3. Status lifecycles</h2>
+<ul>
+<li><strong>Question:</strong> <code>pending</code> (site inserts) →
+<code>processing</code> (poller claims it) → <code>done</code> (answer
+written) or <code>error</code> (message written). The site polls this
+field.</li>
+<li><strong>Briefing:</strong> <code>draft</code> (crew writing) →
+<code>published</code> (visible on the site).</li>
+</ul>
+<blockquote>
+<p>The poller claims a row atomically
+(<code>UPDATE ... SET status='processing' WHERE status='pending' ... RETURNING</code>)
+so two runners never grab the same question.</p>
+</blockquote>
+<h2 id="pgvector-decision">4. <code>pgvector</code> decision</h2>
+<p>Clustering needs vector similarity. Options: 1.
+<strong><code>pgvector</code> extension</strong> — store embeddings in
+Postgres, cluster with SQL distance. <em>Chosen</em> — one datastore,
+simple, fits the scale (hundreds of articles/day). 2. In-memory
+clustering in Python each run — fine too, but loses
+persistence/queryability.</p>
+<p>We use <code>pgvector</code> for the <code>embedding</code> column;
+if the extension is unavailable at first, the fallback is in-Python
+clustering writing only <code>cluster_id</code> back. See
+<code>06-DECISIONS.md</code> D-004.</p>
+<h2 id="indexes-planned">5. Indexes (planned)</h2>
+<ul>
+<li><code>articles(url)</code> unique — dedupe.</li>
+<li><code>articles(cluster_id)</code>,
+<code>articles(published_at)</code>.</li>
+<li><code>briefings(date)</code> unique.</li>
+<li><code>questions(status, created_at)</code> — the poller’s hot
+path.</li>
+<li><code>articles</code> ivfflat index on <code>embedding</code> if
+<code>pgvector</code> is used.</li>
+</ul>
+</body>
+</html>

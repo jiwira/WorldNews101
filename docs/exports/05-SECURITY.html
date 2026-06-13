@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>05-SECURITY</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <style>
+    body{max-width:820px;margin:2.5rem auto;padding:0 1.25rem;
+         font:16px/1.7 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#1a1a1a}
+    h1,h2,h3{line-height:1.25;margin-top:2rem;color:#0b1f3a}
+    h1{border-bottom:2px solid #0b1f3a;padding-bottom:.3rem}
+    code{background:#f3f4f6;padding:.1rem .35rem;border-radius:4px;font-size:.9em}
+    pre{background:#0b1f3a;color:#e6edf3;padding:1rem;border-radius:8px;overflow:auto}
+    pre code{background:none;color:inherit;padding:0}
+    table{border-collapse:collapse;width:100%;margin:1rem 0}
+    th,td{border:1px solid #d0d7de;padding:.5rem .7rem;text-align:left;vertical-align:top}
+    th{background:#f3f4f6}
+    blockquote{border-left:4px solid #0b1f3a;margin:1rem 0;padding:.2rem 1rem;color:#444;background:#f8fafc}
+    a{color:#0b5fff}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">05-SECURITY</h1>
+</header>
+<h1 id="security">05 — Security</h1>
+<blockquote>
+<p>Threat model and defenses for a <strong>public</strong> website
+backed by <strong>LLM agents</strong> running on a <strong>home GPU
+box</strong>. Written for a future programmer <em>and</em> as a
+checklist for a penetration test. Security is designed in (see
+<code>01-ARCHITECTURE.md</code> §4), not bolted on.</p>
+</blockquote>
+<h2 id="threat-model-who-attacks-this-and-how">1. Threat model — who
+attacks this and how</h2>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 18%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr>
+<th>Attacker</th>
+<th>Goal</th>
+<th>Primary surface</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Opportunistic scanner/botnet</td>
+<td>Find any exposed service, default creds, known CVEs</td>
+<td>The public site, the tunnel</td>
+</tr>
+<tr>
+<td>Abuser</td>
+<td>Run up your GPU cost / DoS the queue via the Ask box</td>
+<td>The <code>questions</code> endpoint</td>
+</tr>
+<tr>
+<td>Prompt-injection actor</td>
+<td>Make the agents follow instructions hidden in news text or
+questions</td>
+<td>LLM inputs</td>
+</tr>
+<tr>
+<td>Data-exfil actor</td>
+<td>Reach Postgres, n8n, or Ollama behind the site</td>
+<td>Internal network, SSRF</td>
+</tr>
+<tr>
+<td>Credibility attacker</td>
+<td>Discredit the project by exposing biased/wrong “neutral” output</td>
+<td>The content itself</td>
+</tr>
+</tbody>
+</table>
+<h2 id="network-exposure-the-foundation">2. Network &amp; exposure (the
+foundation)</h2>
+<ul>
+<li><strong>Cloudflare Tunnel exposes ONLY the Next.js site.</strong>
+The tunnel makes an <em>outbound</em> connection to Cloudflare —
+<strong>no router ports are opened</strong>, no home IP is
+published.</li>
+<li><strong>Ollama, n8n, Postgres, the CrewAI service, and Phoenix are
+never internet-reachable.</strong> They bind to
+<code>127.0.0.1</code>/the docker network only. Verify with an external
+port scan (pentest item P-1): nothing but Cloudflare should answer.</li>
+<li>Cloudflare provides <strong>TLS, DDoS protection, WAF, and rate
+limiting</strong> at the edge.</li>
+<li>n8n keeps <strong>basic auth</strong> enabled even though it’s local
+(defense in depth).</li>
+</ul>
+<h2 id="the-llm-specific-risk-prompt-injection">3. The LLM-specific
+risk: prompt injection</h2>
+<p>This is the highest-novelty risk. Articles and user questions are
+<strong>untrusted input</strong> and will contain text like <em>“ignore
+previous instructions and…”</em>.</p>
+<p><strong>Defenses:</strong> - <strong>Data, not instructions.</strong>
+Article text and user questions are inserted into prompts as clearly
+delimited <em>content to analyze</em>, never as system/role
+instructions. System prompts are fixed and separate. - <strong>Least
+authority.</strong> The agents have <strong>no tools that can
+act</strong> (no shell, no file write, no arbitrary HTTP). The Curator’s
+fetching is a fixed, allow-listed function — not an agent-controlled web
+request. So even a “successful” injection can only change <em>text
+output</em>, not take actions. - <strong>Output validation.</strong> The
+Editor’s output is parsed against an expected schema (headline,
+sentiment ∈ {bullish,neutral,bearish}, markdown layers). Malformed or
+out-of-scope output is rejected/regenerated, not published. -
+<strong>Scope enforcement.</strong> A guard checks output stays
+economic/analytical; refuses to emit instructions, code, or anything
+resembling actions. - <strong>No secrets in prompts.</strong> Models
+never see API keys, DB creds, or internal URLs.</p>
+<p>Pentest items: P-2 (inject via a crafted question), P-3 (inject via a
+planted RSS item) — confirm neither changes system behavior, only
+produces flagged/rejected text.</p>
+<h2 id="input-handling-on-the-ask-endpoint">4. Input handling on the Ask
+endpoint</h2>
+<ul>
+<li><strong>Length cap</strong> on questions (e.g. ≤ 500 chars) — reject
+longer.</li>
+<li><strong>Sanitize + validate</strong> with <code>zod</code> (already
+in the portfolio stack) at the tRPC layer.</li>
+<li><strong>Rate limiting</strong>: per-client (salted hash of IP — we
+store <code>client_hash</code>, <strong>never the raw IP</strong>) and a
+global cap. Excess → polite rejection.</li>
+<li><strong>Queue backpressure</strong>: if pending questions exceed a
+threshold, new submissions are declined (“agents are busy”) rather than
+unboundedly queued — protects the GPU.</li>
+<li><strong>No HTML execution</strong>: questions are treated as plain
+text everywhere.</li>
+</ul>
+<h2 id="output-rendering-xss-prevention">5. Output rendering (XSS
+prevention)</h2>
+<ul>
+<li>All AI-generated markdown is rendered through
+<code>react-markdown</code> with <strong>raw HTML disabled</strong> /
+sanitized (<code>sanitize-html</code> is already a portfolio
+dependency). The model could be tricked into emitting
+<code>&lt;script&gt;</code>; it must never execute.</li>
+<li>Outbound source links use <code>rel="noopener noreferrer"</code> and
+are URL-validated.</li>
+</ul>
+<h2 id="database-secrets">6. Database &amp; secrets</h2>
+<ul>
+<li>Postgres reachable only on the local/docker network; strong
+password; least-privilege app role (the web app cannot DROP/ALTER).</li>
+<li>Secrets in <code>.env</code> / Docker secrets,
+<strong>never</strong> committed (<code>.gitignore</code> enforced) and
+never sent to the models.</li>
+<li>The web app’s DB role can read briefings/stories and insert
+questions; it <strong>cannot</strong> read internal-only columns like
+<code>client_hash</code> beyond what’s needed.</li>
+</ul>
+<h2 id="ssrf-fetch-safety-ingestion">7. SSRF / fetch safety
+(ingestion)</h2>
+<ul>
+<li>The Curator fetches from a <strong>fixed allow-list</strong> of
+RSS/GDELT endpoints — it does not fetch arbitrary URLs derived from
+article content or user input. This closes the SSRF path that would
+otherwise let injected content pull internal URLs.</li>
+</ul>
+<h2 id="abuse-cost-controls">8. Abuse &amp; cost controls</h2>
+<ul>
+<li>Per-IP and global rate limits (edge + app).</li>
+<li>Queue depth cap (GPU protection).</li>
+<li>Optional: a lightweight CAPTCHA/turnstile (Cloudflare Turnstile) on
+the Ask box if abuse appears. Deferred unless needed.</li>
+</ul>
+<h2 id="trust-abuse-of-the-content-credibility-defense">9. Trust &amp;
+abuse of the <em>content</em> (credibility defense)</h2>
+<ul>
+<li>Every bias rating and the “neutral” synthesis is labeled <strong>“AI
+assessment, not fact.”</strong></li>
+<li>Sources are always shown and linked so readers can verify.</li>
+<li>A visible disclaimer: <strong>analysis/education, not financial
+advice.</strong></li>
+<li>This is a security concern because <em>misrepresentation</em> is the
+easiest way to damage the project’s reputation — handled by honest
+labeling, not by pretending to be authoritative.</li>
+</ul>
+<h2 id="penetration-test-checklist">10. Penetration-test checklist</h2>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 24%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr>
+<th>ID</th>
+<th>Test</th>
+<th>Pass criteria</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P-1</td>
+<td>External port scan of the home IP</td>
+<td>Only Cloudflare answers; no Ollama/n8n/PG/Phoenix</td>
+</tr>
+<tr>
+<td>P-2</td>
+<td>Prompt injection via a crafted question</td>
+<td>Output flagged/rejected; no behavior change, no tool/action</td>
+</tr>
+<tr>
+<td>P-3</td>
+<td>Prompt injection via a planted RSS/GDELT item</td>
+<td>Same — text-only effect, no actions</td>
+</tr>
+<tr>
+<td>P-4</td>
+<td>XSS payload in a question, then view rendered output</td>
+<td>Rendered inert; no script execution</td>
+</tr>
+<tr>
+<td>P-5</td>
+<td>Flood the Ask endpoint</td>
+<td>Rate-limited / backpressured; GPU not exhausted</td>
+</tr>
+<tr>
+<td>P-6</td>
+<td>Attempt SSRF (get the fetcher to hit an internal URL)</td>
+<td>Blocked by the fixed allow-list</td>
+</tr>
+<tr>
+<td>P-7</td>
+<td>Try to reach n8n / Phoenix / Postgres from the internet</td>
+<td>Refused — not exposed</td>
+</tr>
+<tr>
+<td>P-8</td>
+<td>Inspect responses for secret/PII leakage (IPs, keys, internal
+URLs)</td>
+<td>None present</td>
+</tr>
+<tr>
+<td>P-9</td>
+<td>SQL injection via inputs</td>
+<td>Blocked by parameterized Drizzle queries + zod validation</td>
+</tr>
+<tr>
+<td>P-10</td>
+<td>Check TLS / headers (HSTS, CSP, X-Frame-Options)</td>
+<td>Set via Cloudflare + Next.js headers</td>
+</tr>
+</tbody>
+</table>
+<h2 id="update-discipline">11. Update discipline</h2>
+<p>When any input path, endpoint, or exposed surface changes, this
+document and the pentest checklist are updated in the same change, and
+the HTML/DOCX exports regenerated.</p>
+</body>
+</html>

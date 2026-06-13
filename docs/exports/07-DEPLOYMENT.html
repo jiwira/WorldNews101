@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>07-DEPLOYMENT</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    html {
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 12px;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      html {
+        background-color: white;
+      }
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    svg {
+      height: auto;
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+      font-size: 85%;
+      margin: 0;
+      hyphens: manual;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <style>
+    body{max-width:820px;margin:2.5rem auto;padding:0 1.25rem;
+         font:16px/1.7 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#1a1a1a}
+    h1,h2,h3{line-height:1.25;margin-top:2rem;color:#0b1f3a}
+    h1{border-bottom:2px solid #0b1f3a;padding-bottom:.3rem}
+    code{background:#f3f4f6;padding:.1rem .35rem;border-radius:4px;font-size:.9em}
+    pre{background:#0b1f3a;color:#e6edf3;padding:1rem;border-radius:8px;overflow:auto}
+    pre code{background:none;color:inherit;padding:0}
+    table{border-collapse:collapse;width:100%;margin:1rem 0}
+    th,td{border:1px solid #d0d7de;padding:.5rem .7rem;text-align:left;vertical-align:top}
+    th{background:#f3f4f6}
+    blockquote{border-left:4px solid #0b1f3a;margin:1rem 0;padding:.2rem 1rem;color:#444;background:#f8fafc}
+    a{color:#0b5fff}
+  </style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">07-DEPLOYMENT</h1>
+</header>
+<h1 id="deployment">07 — Deployment</h1>
+<blockquote>
+<p>All-local on the RTX 5070 Ti box; <strong>Cloudflare Tunnel</strong>
+exposes only the website at <code>WorldNews.jiwira.com</code>. No VPS,
+no open ports.</p>
+</blockquote>
+<h2 id="what-runs-on-the-box">1. What runs on the box</h2>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Port (local only)</th>
+<th>Exposed publicly?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Next.js site</td>
+<td>3000</td>
+<td><strong>Yes — via Cloudflare Tunnel only</strong></td>
+</tr>
+<tr>
+<td>Postgres</td>
+<td>5432</td>
+<td>No</td>
+</tr>
+<tr>
+<td>n8n</td>
+<td>5678</td>
+<td>No</td>
+</tr>
+<tr>
+<td>CrewAI service (FastAPI)</td>
+<td>8000</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Ollama</td>
+<td>11434</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Phoenix</td>
+<td>6006</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p>Everything except Next.js binds to <code>127.0.0.1</code> or the
+Docker network.</p>
+<h2 id="cloudflare-tunnel-setup-outline">2. Cloudflare Tunnel setup
+(outline)</h2>
+<ol type="1">
+<li><code>cloudflared</code> runs on the box (as a service) and dials
+out to Cloudflare — no inbound ports, no public IP exposure.</li>
+<li>A tunnel maps <code>WorldNews.jiwira.com</code> →
+<code>http://localhost:3000</code> (the Next.js site).</li>
+<li>DNS for <code>WorldNews.jiwira.com</code> is a Cloudflare proxied
+record pointing at the tunnel.</li>
+<li>TLS, DDoS protection, WAF, and edge rate-limiting are handled by
+Cloudflare.</li>
+</ol>
+<blockquote>
+<p>Only the site hostname is routed. There is no tunnel route to
+n8n/Phoenix/Postgres/Ollama.</p>
+</blockquote>
+<h2 id="process-management">3. Process management</h2>
+<ul>
+<li>Long-running services (Postgres, n8n, Ollama, Phoenix) are
+<strong>Docker containers with
+<code>--restart unless-stopped</code></strong> (n8n + Phoenix already
+run this way).</li>
+<li>The Next.js site and the CrewAI/poller service run under the same
+compose project (or <code>systemd</code> units) so they restart on
+boot.</li>
+<li><code>cloudflared</code> runs as a <code>systemd</code> service /
+container so the tunnel reconnects on boot.</li>
+</ul>
+<h2 id="environment-secrets">4. Environment &amp; secrets</h2>
+<ul>
+<li>A single <code>.env</code> (gitignored) holds DB creds, n8n auth,
+and the Ollama base URL.</li>
+<li>The Cloudflare tunnel credential/token is stored where
+<code>cloudflared</code> expects it — not in the repo.</li>
+<li>Models never receive any of these values (see
+<code>05-SECURITY.md</code>).</li>
+</ul>
+<h2 id="availability-expectations-v1">5. Availability expectations
+(v1)</h2>
+<ul>
+<li><strong>Daily briefings:</strong> always readable (cached in
+Postgres) whenever the site is up.</li>
+<li><strong>Live Q&amp;A:</strong> requires the box to be on and the
+crew healthy; degrades gracefully otherwise (“agents are resting —
+briefings are still available”).</li>
+<li>Future: move Postgres + the Next.js site to a VPS to decouple uptime
+from the box, with the GPU box still doing analysis. The Approach-A
+design already supports this with no code changes — only the DB host
+moves.</li>
+</ul>
+<h2 id="backups">6. Backups</h2>
+<ul>
+<li>Nightly <code>pg_dump</code> of Postgres (briefings/stories are the
+valuable output).</li>
+<li>n8n workflow export committed to the repo (<code>n8n/</code> once
+implemented).</li>
+</ul>
+<h2 id="update-discipline">7. Update discipline</h2>
+<p>When the deployment topology changes (a service exposed, a host
+moved, a port changed), update this doc and <code>05-SECURITY.md</code>
+together, and regenerate the HTML/DOCX exports.</p>
+</body>
+</html>
