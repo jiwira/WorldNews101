@@ -12,17 +12,25 @@ function toLean(v: string | null | undefined): Lean {
   return "center";
 }
 
-function toLeanSpread(left: unknown, center: unknown, right: unknown): LeanSpread {
+// `stories.lean_spread` is a single jsonb column shaped {"left":n,"center":n,"right":n}.
+// The pg driver parses jsonb into a JS object, but tolerate a raw string just in case.
+function toLeanSpread(jsonb: unknown): LeanSpread {
+  let obj: Record<string, unknown> = {};
+  if (typeof jsonb === "string") {
+    try { obj = JSON.parse(jsonb); } catch { obj = {}; }
+  } else if (jsonb && typeof jsonb === "object") {
+    obj = jsonb as Record<string, unknown>;
+  }
   return {
-    left: typeof left === "number" ? left : Number(left ?? 0),
-    center: typeof center === "number" ? center : Number(center ?? 0),
-    right: typeof right === "number" ? right : Number(right ?? 0),
+    left: Number(obj.left ?? 0),
+    center: Number(obj.center ?? 0),
+    right: Number(obj.right ?? 0),
   };
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function rowToStory(row: Record<string, any>, sources: SourceRef[]): Story {
-  const leanSpread = toLeanSpread(row.lean_left, row.lean_center, row.lean_right);
+  const leanSpread = toLeanSpread(row.lean_spread);
   return {
     id: String(row.id ?? row.cluster_id ?? ""),
     topic: String(row.topic ?? row.headline ?? ""),
@@ -46,15 +54,35 @@ function rowToStory(row: Record<string, any>, sources: SourceRef[]): Story {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function rowToBriefing(row: Record<string, any>, storyIds: string[]): Briefing {
+  // briefings has a single `summary_md` (no beginner/pro split). Surface it in both
+  // layers so the beginner↔pro toggle never renders blank.
+  const summary = String(row.summary_md ?? "");
   return {
     id: String(row.id ?? ""),
-    date: String(row.date ?? row.briefing_date ?? ""),
+    date: toDateString(row.date),
     headline: String(row.headline ?? ""),
     overallSentiment: toSentiment(row.overall_sentiment ?? row.sentiment),
-    beginnerMd: String(row.beginner_md ?? ""),
-    proMd: String(row.pro_md ?? ""),
+    beginnerMd: summary,
+    proMd: summary,
     storyIds,
   };
+}
+
+// `briefings.date` is a DATE column; node-pg parses it into a JS Date at LOCAL midnight.
+// Read the local Y/M/D parts — toISOString() would reformat in UTC and shift the day back.
+function toDateString(v: unknown): string {
+  if (v instanceof Date) {
+    const y = v.getFullYear();
+    const m = String(v.getMonth() + 1).padStart(2, "0");
+    const d = String(v.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  }
+  return String(v ?? "");
+}
+
+// pg returns a uuid[] column as a JS array; normalize each element to a string.
+function toStringArray(v: unknown): string[] {
+  return Array.isArray(v) ? v.map((x) => String(x)) : [];
 }
 
 export class DbDataSource implements DataSource {
@@ -71,8 +99,7 @@ export class DbDataSource implements DataSource {
       );
       if (!res.rows.length) return null;
       const row = res.rows[0] as Record<string, unknown>;
-      const storyIds = await this.storyIdsForBriefing(String(row.id));
-      return rowToBriefing(row as Record<string, string>, storyIds);
+      return rowToBriefing(row as Record<string, string>, toStringArray(row.story_ids));
     } catch {
       return null;
     }
@@ -86,8 +113,7 @@ export class DbDataSource implements DataSource {
       );
       if (!res.rows.length) return null;
       const row = res.rows[0] as Record<string, unknown>;
-      const storyIds = await this.storyIdsForBriefing(String(row.id));
-      return rowToBriefing(row as Record<string, string>, storyIds);
+      return rowToBriefing(row as Record<string, string>, toStringArray(row.story_ids));
     } catch {
       return null;
     }
@@ -99,13 +125,12 @@ export class DbDataSource implements DataSource {
         `SELECT * FROM briefings ORDER BY date DESC LIMIT $1`,
         [limit]
       );
-      const results: Briefing[] = [];
-      for (const row of res.rows) {
-        const r = row as Record<string, unknown>;
-        const storyIds = await this.storyIdsForBriefing(String(r.id));
-        results.push(rowToBriefing(r as Record<string, string>, storyIds));
-      }
-      return results;
+      return res.rows.map((row) =>
+        rowToBriefing(
+          row as Record<string, string>,
+          toStringArray((row as Record<string, unknown>).story_ids)
+        )
+      );
     } catch {
       return [];
     }
@@ -166,31 +191,13 @@ export class DbDataSource implements DataSource {
     }
   }
 
-  private async storyIdsForBriefing(briefingId: string): Promise<string[]> {
-    try {
-      // Try junction table first, fall back to direct foreign key
-      const res = await this.pool.query(
-        `SELECT story_id FROM briefing_stories WHERE briefing_id = $1 ORDER BY position`,
-        [briefingId]
-      ).catch(() =>
-        this.pool.query(
-          `SELECT id as story_id FROM stories WHERE briefing_id = $1`,
-          [briefingId]
-        )
-      );
-      return res.rows.map((r: Record<string, unknown>) => String(r.story_id));
-    } catch {
-      return [];
-    }
-  }
-
   private async sourcesForStory(storyId: string): Promise<SourceRef[]> {
     try {
       const res = await this.pool.query(
-        `SELECT source_name as source, url, lean
+        `SELECT source, url, lean
          FROM articles
          WHERE cluster_id = $1
-         ORDER BY created_at`,
+         ORDER BY published_at DESC NULLS LAST`,
         [storyId]
       );
       return res.rows.map((r: Record<string, unknown>) => ({

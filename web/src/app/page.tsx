@@ -3,6 +3,10 @@ import { SentimentBadge } from "@/components/SentimentBadge";
 import { LayerToggle } from "@/components/LayerToggle";
 import { StoryCard } from "@/components/StoryCard";
 
+// Read the live DB per request — the daily briefing changes, so this must not be
+// frozen into the build-time prerender.
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const ds = await getDataSource();
   const briefing = await ds.latestBriefing();

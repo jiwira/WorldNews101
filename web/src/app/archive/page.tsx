@@ -2,6 +2,9 @@ import Link from "next/link";
 import { getDataSource } from "@/lib/datasource";
 import { SentimentBadge } from "@/components/SentimentBadge";
 
+// Read the live DB per request so new briefings appear without a rebuild.
+export const dynamic = "force-dynamic";
+
 export default async function ArchivePage() {
   const briefings = await (await getDataSource()).recentBriefings(30);
   return (
