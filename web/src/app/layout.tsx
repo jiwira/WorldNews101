@@ -7,49 +7,71 @@ export const metadata: Metadata = {
   description: "The world's news, clustered and explained through an economic lens.",
 };
 
+const NAV = [
+  { href: "/", label: "Today" },
+  { href: "/ask", label: "Ask" },
+  { href: "/archive", label: "Archive" },
+  { href: "/sources", label: "Sources" },
+  { href: "/how-it-works", label: "How it works" },
+];
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-slate-50 text-slate-900 antialiased">
-        {/* ── Header ── */}
-        <header className="border-b border-slate-200 bg-white shadow-sm">
-          <nav className="mx-auto flex max-w-4xl items-center justify-between px-5 py-4">
-            <Link href="/" className="flex items-baseline gap-2">
-              <span
-                className="text-xl font-bold tracking-tight text-slate-900"
-                style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-              >
-                World&nbsp;&amp;&nbsp;Finance&nbsp;101
-              </span>
-              <span className="hidden text-xs font-medium uppercase tracking-widest text-slate-400 sm:inline">
-                AI-powered economic briefing
+      <body className="min-h-screen bg-paper text-ink antialiased">
+        {/* ── Utility strip ── */}
+        <div className="bg-ink text-paper">
+          <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-1.5">
+            <span className="kicker text-paper/70">AI-powered economic briefing</span>
+            <span className="kicker hidden text-paper/70 sm:inline">
+              Indonesia edition · Local AI
+            </span>
+          </div>
+        </div>
+
+        {/* ── Masthead ── */}
+        <div className="border-b-2 border-ink bg-paper">
+          <div className="mx-auto max-w-5xl px-5 pt-7 pb-4 text-center">
+            <Link href="/" className="inline-block">
+              <span className="font-display text-4xl font-bold tracking-tight text-ink sm:text-6xl">
+                World <span className="text-brand">&amp;</span> Finance{" "}
+                <span className="text-gold">101</span>
               </span>
             </Link>
-            <div className="flex items-center gap-5 text-sm font-medium text-slate-600">
-              <Link href="/sources" className="hover:text-slate-900">Sources</Link>
-              <Link href="/ask" className="hover:text-slate-900">Ask</Link>
-              <Link href="/archive" className="hover:text-slate-900">Archive</Link>
-              <Link href="/how-it-works" className="hover:text-slate-900">How it works</Link>
-            </div>
-          </nav>
-        </header>
+            <p className="kicker mt-2.5">
+              The world&apos;s news — clustered &amp; explained through an economic lens
+            </p>
+          </div>
+        </div>
 
-        {/* ── Main content ── */}
-        <main className="mx-auto max-w-4xl px-5 py-10">{children}</main>
+        {/* ── Section nav ── */}
+        <nav className="sticky top-0 z-20 border-b border-hair bg-surface/95 backdrop-blur">
+          <div className="mx-auto flex max-w-5xl items-center justify-center gap-5 px-5 py-2.5 sm:gap-8">
+            {NAV.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="kicker text-ink-soft transition-colors hover:text-brand"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </nav>
+
+        {/* ── Main ── */}
+        <main className="mx-auto max-w-3xl px-5 py-10 sm:py-14">{children}</main>
 
         {/* ── Footer ── */}
-        <footer className="border-t border-slate-200 bg-white">
-          <div className="mx-auto max-w-4xl px-5 py-8 text-xs text-slate-500">
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-              <span>
+        <footer className="border-t-2 border-ink bg-surface">
+          <div className="mx-auto max-w-5xl px-5 py-8">
+            <div className="flex flex-col gap-3 text-xs text-ink-soft sm:flex-row sm:items-center sm:justify-between">
+              <span className="max-w-xl">
                 Bias ratings and the &quot;neutral&quot; view are{" "}
-                <strong className="text-slate-700">AI assessments, not fact</strong>.
-                Analysis for education —{" "}
-                <strong className="text-slate-700">not financial advice</strong>.
+                <strong className="text-ink">AI assessments, not fact</strong>. Analysis is
+                for education — <strong className="text-ink">not financial advice</strong>.
               </span>
-              <span className="text-slate-400">
-                Powered by local AI · RTX 5070 Ti · No paid APIs
-              </span>
+              <span className="kicker">Local AI · RTX 5070 Ti · No paid APIs</span>
             </div>
           </div>
         </footer>

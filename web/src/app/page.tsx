@@ -7,65 +7,65 @@ import { StoryCard } from "@/components/StoryCard";
 // frozen into the build-time prerender.
 export const dynamic = "force-dynamic";
 
+const MONTHS = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+function formatDate(iso: string): string {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso);
+  if (!m) return iso;
+  return `${Number(m[3])} ${MONTHS[Number(m[2]) - 1]} ${m[1]}`;
+}
+
 export default async function Home() {
   const ds = await getDataSource();
   const briefing = await ds.latestBriefing();
   const ranked = await ds.rankedStories(10);
 
   return (
-    <div className="space-y-12">
-      {/* ── Today's Briefing Hero ── */}
+    <div className="space-y-16">
+      {/* ── Today's Briefing ── */}
       {briefing ? (
-        <section className="rounded-2xl border border-slate-200 bg-white px-7 py-8 shadow-sm">
-          {/* Date + sentiment */}
-          <div className="mb-3 flex items-center gap-3 text-xs font-semibold uppercase tracking-widest text-slate-400">
-            <time dateTime={briefing.date}>{briefing.date}</time>
-            <span className="text-slate-300">·</span>
-            <span>Today's Briefing</span>
+        <section>
+          <div className="flex items-center gap-3">
+            <span className="kicker text-brand">Today&apos;s Briefing</span>
+            <span className="h-px flex-1 bg-hair" />
+            <time className="kicker" dateTime={briefing.date}>
+              {formatDate(briefing.date)}
+            </time>
             <SentimentBadge sentiment={briefing.overallSentiment} />
           </div>
 
-          {/* Headline */}
-          <h1
-            className="text-2xl font-bold leading-tight text-slate-900 sm:text-3xl"
-            style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-          >
+          <h1 className="mt-5 font-display text-3xl font-bold leading-[1.08] text-ink sm:text-[2.75rem]">
             {briefing.headline}
           </h1>
 
-          {/* Divider */}
-          <div className="my-5 h-px bg-slate-100" />
-
-          {/* Analysis toggle */}
-          <LayerToggle beginnerMd={briefing.beginnerMd} proMd={briefing.proMd} />
+          <div className="mt-6 max-w-prose">
+            <LayerToggle beginnerMd={briefing.beginnerMd} proMd={briefing.proMd} />
+          </div>
         </section>
       ) : (
-        <div className="rounded-2xl border border-slate-200 bg-white px-7 py-10 text-center text-slate-400">
-          <p className="text-lg font-medium">No briefing yet today</p>
-          <p className="mt-1 text-sm">The AI pipeline runs every morning. Check back soon.</p>
-        </div>
+        <section className="border-y border-hair py-16 text-center">
+          <p className="font-display text-xl font-bold text-ink">No briefing yet today</p>
+          <p className="mt-2 text-sm text-ink-soft">
+            The AI pipeline runs each morning. Check back soon.
+          </p>
+        </section>
       )}
 
-      {/* ── Ranked Story Feed ── */}
-      <section className="space-y-4">
-        <div className="flex items-baseline justify-between">
-          <h2
-            className="text-lg font-bold text-slate-900"
-            style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-          >
-            Stories — ranked by impact
-          </h2>
-          <span className="text-xs text-slate-400 uppercase tracking-wide font-semibold">
-            Impact × Indonesia relevance
-          </span>
+      {/* ── Ranked story feed ── */}
+      <section>
+        <div className="flex items-baseline justify-between border-b-2 border-ink pb-2">
+          <h2 className="font-display text-xl font-bold text-ink">Today&apos;s stories</h2>
+          <span className="kicker hidden sm:inline">Ranked by impact × Indonesia relevance</span>
         </div>
 
         {ranked.length === 0 ? (
-          <p className="text-slate-400 text-sm">No stories available yet.</p>
+          <p className="py-10 text-sm text-ink-soft">No stories available yet.</p>
         ) : (
-          <div className="grid gap-4">
-            {ranked.map((story) => (
-              <StoryCard key={story.id} story={story} />
+          <div className="mt-3">
+            {ranked.map((story, i) => (
+              <StoryCard key={story.id} story={story} rank={i + 1} />
             ))}
           </div>
         )}

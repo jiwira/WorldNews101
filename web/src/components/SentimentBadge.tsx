@@ -1,16 +1,58 @@
 import type { Sentiment } from "@/lib/types";
 
-const MAP: Record<Sentiment, { label: string; cls: string; dot: string }> = {
-  bullish: { label: "Bullish", cls: "bg-green-50 text-green-700", dot: "🟢" },
-  neutral: { label: "Neutral", cls: "bg-slate-100 text-slate-700", dot: "⚪" },
-  bearish: { label: "Bearish", cls: "bg-red-50 text-red-700", dot: "🔴" },
+// Plain-language economic OUTLOOK (direction), not finance jargon. The bullish/
+// bearish term is kept only in the tooltip for the curious.
+const MAP: Record<
+  Sentiment,
+  { label: string; gloss: string; term: string; arrow: string; text: string; dot: string }
+> = {
+  bullish: {
+    label: "Positive",
+    gloss: "good for growth / your costs",
+    term: "bullish",
+    arrow: "▲",
+    text: "text-bull",
+    dot: "bg-bull",
+  },
+  neutral: {
+    label: "Mixed",
+    gloss: "balanced or unclear",
+    term: "neutral",
+    arrow: "■",
+    text: "text-flat",
+    dot: "bg-flat",
+  },
+  bearish: {
+    label: "Negative",
+    gloss: "a headwind — watch your costs",
+    term: "bearish",
+    arrow: "▼",
+    text: "text-bear",
+    dot: "bg-bear",
+  },
 };
 
-export function SentimentBadge({ sentiment }: { sentiment: Sentiment }) {
+export function SentimentBadge({
+  sentiment,
+  showGloss = false,
+}: {
+  sentiment: Sentiment;
+  showGloss?: boolean;
+}) {
   const s = MAP[sentiment];
   return (
-    <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium ${s.cls}`}>
-      <span aria-hidden>{s.dot}</span> {s.label}
+    <span
+      title={`Economic outlook: ${s.label} (${s.term}) — ${s.gloss}`}
+      className="inline-flex shrink-0 items-baseline gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em]"
+    >
+      <span className={s.text}>
+        <span aria-hidden>{s.arrow}</span> {s.label}
+      </span>
+      {showGloss && (
+        <span className="font-normal normal-case tracking-normal text-ink-faint">
+          — {s.gloss}
+        </span>
+      )}
     </span>
   );
 }

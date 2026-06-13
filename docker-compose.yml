@@ -1,6 +1,7 @@
 services:
   db:
     image: pgvector/pgvector:pg16
+    restart: unless-stopped   # survive host reboots (data lives in the named volume)
     environment:
       POSTGRES_USER: worldnews
       POSTGRES_PASSWORD: worldnews

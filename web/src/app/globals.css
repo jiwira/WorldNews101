@@ -1,10 +1,27 @@
 @import "tailwindcss";
 
-/* ─── Typography ───────────────────────────────────────────────────────────────
-   Body font set in @layer base so Tailwind utilities still override it cleanly.
-   DO NOT add unlayered body color/background rules here — that beats Tailwind's
-   cascade layers and causes white-on-white. Colors are controlled via Tailwind
-   classes on elements in layout.tsx. */
+/* ─── Design tokens (Tailwind v4 @theme → utilities like bg-paper, text-ink) ──────
+   "World & Finance 101" identity: warm editorial paper, ink-black type, a deep
+   forest-green brand accent and a muted gold highlight. Deliberately NOT the
+   default slate/blue SaaS palette. */
+@theme {
+  --color-paper: #f4f1ea;       /* page background — warm newsprint */
+  --color-surface: #fffdf7;     /* cards / panels — warm white */
+  --color-ink: #1b1814;         /* near-black warm ink */
+  --color-ink-soft: #6d6657;    /* muted body / captions */
+  --color-ink-faint: #9a9384;   /* eyebrows, meta */
+  --color-hair: #e3dccc;        /* hairline rules / borders */
+  --color-brand: #15433a;       /* deep forest green — masthead, links */
+  --color-brand-soft: #2c6354;
+  --color-gold: #9a7320;        /* highlight / underline accent */
+  --color-bull: #15803d;
+  --color-bear: #b3261e;
+  --color-flat: #6d6657;
+  --color-lean-left: #2563eb;
+  --color-lean-center: #b3aa97;
+  --color-lean-right: #d83a4e;
+}
+
 @layer base {
   body {
     font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
@@ -12,71 +29,90 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-
+  /* Editorial display serif for all headings. */
   h1, h2, h3, h4 {
-    font-family: Georgia, "Times New Roman", Times, serif;
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
+      "Times New Roman", serif;
     letter-spacing: -0.02em;
+    color: var(--color-ink);
   }
 }
 
+/* Reusable editorial primitives ------------------------------------------------ */
+
+/* Kicker / eyebrow — the small tracked uppercase label used all over newspapers. */
+.kicker {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
+}
+
+/* The serif display family as a utility (for elements that aren't headings). */
+.font-display {
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
+    "Times New Roman", serif;
+  letter-spacing: -0.02em;
+}
+
+/* Gold underline accent for links/wordmark flourishes. */
+.rule-gold {
+  background-image: linear-gradient(var(--color-gold), var(--color-gold));
+  background-size: 100% 2px;
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+}
+
 /* ─── Prose for rendered AI markdown ──────────────────────────────────────────
-   .prose-wn wraps ReactMarkdown output.  Extend here; never add raw HTML. */
+   .prose-wn wraps ReactMarkdown output. The beginner layer uses **bold** labels
+   ("What happened", "Why it matters to you", "What to do or watch") — styled to
+   read as scannable sub-sections. */
 .prose-wn {
   line-height: 1.75;
-  color: #1e293b; /* slate-800 */
+  color: #2a2620;
+  font-size: 0.975rem;
 }
-.prose-wn h1 {
-  font-family: Georgia, "Times New Roman", Times, serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 1.25rem 0 0.5rem;
-  color: #0f172a;
+.prose-wn > p:first-child { margin-top: 0; }
+.prose-wn h1, .prose-wn h2, .prose-wn h3 {
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  color: var(--color-ink);
 }
-.prose-wn h2 {
-  font-family: Georgia, "Times New Roman", Times, serif;
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin: 1.25rem 0 0.4rem;
-  color: #0f172a;
+.prose-wn h1 { font-size: 1.5rem; font-weight: 700; margin: 1.25rem 0 0.5rem; }
+.prose-wn h2 { font-size: 1.125rem; font-weight: 600; margin: 1.25rem 0 0.4rem; }
+.prose-wn h3 { font-size: 1rem; font-weight: 600; margin: 1rem 0 0.35rem; }
+.prose-wn p { margin: 0.6rem 0; }
+.prose-wn strong { color: var(--color-ink); font-weight: 700; }
+.prose-wn ul, .prose-wn ol { padding-left: 1.25rem; margin: 0.5rem 0; }
+.prose-wn ul { list-style: none; padding-left: 0; }
+.prose-wn ul > li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin: 0.4rem 0;
 }
-.prose-wn h3 {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 1rem 0 0.35rem;
-  color: #1e293b;
+.prose-wn ul > li::before {
+  content: "";
+  position: absolute;
+  left: 0.1rem;
+  top: 0.72em;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 9999px;
+  background: var(--color-gold);
 }
-.prose-wn p {
-  margin: 0.6rem 0;
-}
-.prose-wn strong {
-  color: #0b1f3a;
-  font-weight: 700;
-}
-.prose-wn ul,
-.prose-wn ol {
-  padding-left: 1.4rem;
-  margin: 0.5rem 0;
-}
-.prose-wn li {
-  margin: 0.25rem 0;
-}
-.prose-wn a {
-  color: #1d4ed8;
-  text-decoration: underline;
-}
-.prose-wn a:hover {
-  color: #1e40af;
-}
+.prose-wn ol > li { margin: 0.3rem 0; }
+.prose-wn a { color: var(--color-brand); text-decoration: underline; text-underline-offset: 2px; }
+.prose-wn a:hover { color: var(--color-brand-soft); }
 .prose-wn blockquote {
-  border-left: 3px solid #cbd5e1;
+  border-left: 3px solid var(--color-hair);
   padding-left: 1rem;
-  color: #475569;
+  color: var(--color-ink-soft);
   margin: 0.75rem 0;
 }
 .prose-wn code {
-  background: #f1f5f9;
+  background: #efe9db;
   border-radius: 3px;
   padding: 0.1em 0.35em;
   font-size: 0.875em;
-  color: #0f172a;
+  color: var(--color-ink);
 }

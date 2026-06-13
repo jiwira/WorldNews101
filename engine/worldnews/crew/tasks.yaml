@@ -59,37 +59,64 @@ markets_task:
     Analyze: currencies, commodities, sectors affected. Who pays? What's the
     transmission mechanism from event to economic outcome?
   expected_output: >
-    A markets analysis covering:
-    - Immediate price impacts (currencies, commodities, equities)
-    - Sector-level winners and losers
-    - Transmission mechanism: event -> channel -> economic outcome
-    - Cost-of-living implications
+    A CONCRETE markets analysis (no vague phrasing) covering:
+    - Immediate price impacts WITH direction and rough size (e.g. "Brent +3-5%",
+      "IDR weaker vs USD") across currencies, commodities, equities
+    - Sector-level winners and losers — name the specific sectors/companies
+    - Transmission mechanism stated explicitly: event -> channel -> who pays
+    - Cost-of-living impact on an ordinary {home_region} household: fuel, food,
+      electricity, loan/mortgage rates, jobs — with direction and rough magnitude
   agent: markets_analyst
   context:
     - curate_task
 
 editor_task:
   description: >
-    Synthesize all analyses into a final structured report for {home_region} readers.
+    Synthesize all analyses into a final report for {home_region} readers. Your ONE job:
+    make a non-expert genuinely understand what this means FOR THEM and what to do about
+    it. Useful and insightful — never vague, never filler.
 
-    You have received:
-    1. Curator framing
-    2. Bias analysis
-    3. Game theory analysis
-    4. Markets analysis
+    You have received: 1) Curator framing  2) Bias analysis  3) Game-theory analysis
+    4) Markets analysis.
 
-    Write a neutral synthesis and layered content. Then output a JSON object with exactly
-    these fields (no extra text before or after the JSON):
+    HARD RULES for the reader-facing text:
+    - Be CONCRETE and LOCAL to {home_region}. Name everyday things: pump/fuel prices,
+      groceries, electricity, mortgage/loan rates, the rupiah (IDR), jobs in named sectors.
+    - Give a DIRECTION and rough SIZE wherever possible ("fuel +5-10%", "IDR weaker vs USD",
+      "imported goods pricier in the coming weeks"). Use ranges, not false precision.
+    - Every effect traces a mechanism: event -> channel -> who pays. BANNED phrases:
+      "highlights the potential", "underscores the importance", "signals the need",
+      "transformative", and any sentence that would survive being copied to an unrelated story.
+    - The reader must finish knowing (a) what changed, (b) how it hits their wallet or job,
+      (c) what to do or watch next.
+
+    beginner_md MUST be markdown in EXACTLY this structure:
+      **What happened** — one plain sentence a 15-year-old understands.
+
+      **Why it matters to you**
+      - 2-3 bullets: concrete effect on prices / jobs / savings, each with direction and rough size.
+
+      **What to do or watch**
+      - 2-3 specific, actionable bullets (budget for X, watch Y announcement/number, Z sector
+        reacts first). Practical and grounded — this is education, not personalised financial advice.
+
+    pro_md: expert depth (mechanisms, game theory, macro) and MUST end with a
+    "**Signals to watch**" markdown bullet list of concrete data/market signals.
+
+    impact_summary: ONE punchy, concrete sentence answering "why should a {home_region}
+    reader care?" — usable as a card teaser.
+
+    Then output ONLY a JSON object (no text before or after) with exactly these fields:
     {{
       "sentiment": "bullish" or "neutral" or "bearish",
       "impact_score": integer 0-100 (economic impact severity),
       "region_relevance": float 0.0-1.0 (proximity/relevance to {home_region}),
-      "impact_summary": "one sentence: why this matters to {home_region} readers",
+      "impact_summary": "one concrete sentence: why this matters to {home_region} readers",
       "affected_regions": ["list", "of", "regions"],
       "lean_spread": {{"left": N, "center": N, "right": N}},
       "neutral_md": "neutral markdown synthesis (3-5 paragraphs)",
-      "beginner_md": "beginner-friendly explanation with context (2-3 paragraphs)",
-      "pro_md": "expert-level analysis with mechanisms and data (3-5 paragraphs)"
+      "beginner_md": "the 3-section structure above, as markdown",
+      "pro_md": "expert analysis ending with **Signals to watch**"
     }}
   expected_output: >
     A valid JSON object with these exact fields: sentiment (bullish/neutral/bearish),
