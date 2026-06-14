@@ -1,10 +1,12 @@
 import Link from "next/link";
 import type { Story } from "@/lib/types";
+import type { Lang } from "@/lib/lang";
+import { t } from "@/lib/ui";
 import { SentimentBadge } from "./SentimentBadge";
 import { BiasSpread } from "./BiasSpread";
 import { ImpactTag } from "./Impact";
 
-export function StoryCard({ story, rank }: { story: Story; rank?: number }) {
+export function StoryCard({ story, rank, lang = "en" }: { story: Story; rank?: number; lang?: Lang }) {
   return (
     <Link
       href={`/story/${story.id}`}
@@ -21,7 +23,7 @@ export function StoryCard({ story, rank }: { story: Story; rank?: number }) {
             <h3 className="font-display text-lg font-bold leading-snug text-ink transition-colors group-hover:text-brand">
               {story.topic}
             </h3>
-            <SentimentBadge sentiment={story.sentiment} />
+            <SentimentBadge sentiment={story.sentiment} lang={lang} />
           </div>
 
           {story.impactSummary && (
@@ -31,13 +33,13 @@ export function StoryCard({ story, rank }: { story: Story; rank?: number }) {
           )}
 
           <div className="mt-3 max-w-sm">
-            <BiasSpread spread={story.leanSpread} sourceCount={story.sourceCount} compact />
+            <BiasSpread spread={story.leanSpread} sourceCount={story.sourceCount} compact lang={lang} />
           </div>
 
           <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-ink-faint">
-            <ImpactTag score={story.impactScore} />
+            <ImpactTag score={story.impactScore} lang={lang} />
             <span aria-hidden>·</span>
-            <span>{story.sourceCount} sources</span>
+            <span>{story.sourceCount} {t(lang, "sources_word")}</span>
             {story.affectedRegions.slice(0, 3).map((region) => (
               <span
                 key={region}

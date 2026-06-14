@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getDataSource } from "@/lib/datasource";
 import { getLang } from "@/lib/lang.server";
+import { t } from "@/lib/ui";
 import { SentimentBadge } from "@/components/SentimentBadge";
 
 // Read the live DB per request so new briefings appear without a rebuild.
@@ -17,20 +18,19 @@ function formatDate(iso: string): string {
 }
 
 export default async function ArchivePage() {
-  const briefings = await (await getDataSource(await getLang())).recentBriefings(30);
+  const lang = await getLang();
+  const briefings = await (await getDataSource(lang)).recentBriefings(30);
   return (
     <div className="space-y-8">
       <header className="space-y-2">
-        <span className="kicker text-brand">Archive</span>
-        <h1 className="font-display text-3xl font-bold text-ink">Past briefings</h1>
-        <p className="max-w-prose text-sm text-ink-soft">
-          Every daily briefing, archived. Each links to the stories and sources from that day.
-        </p>
+        <span className="kicker text-brand">{t(lang, "arch_kicker")}</span>
+        <h1 className="font-display text-3xl font-bold text-ink">{t(lang, "arch_title")}</h1>
+        <p className="max-w-prose text-sm text-ink-soft">{t(lang, "arch_intro")}</p>
       </header>
 
       {briefings.length === 0 ? (
         <p className="border-y border-hair py-12 text-center text-sm text-ink-soft">
-          No past briefings found.
+          {t(lang, "arch_empty")}
         </p>
       ) : (
         <ul className="border-t-2 border-ink">
@@ -48,7 +48,7 @@ export default async function ArchivePage() {
                     {b.headline}
                   </p>
                 </div>
-                <SentimentBadge sentiment={b.overallSentiment} />
+                <SentimentBadge sentiment={b.overallSentiment} lang={lang} />
               </Link>
             </li>
           ))}

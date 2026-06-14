@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
 import { getLang } from "@/lib/lang.server";
+import { t } from "@/lib/ui";
 import { LanguageToggle } from "@/components/LanguageToggle";
 
 export const metadata: Metadata = {
@@ -10,13 +11,13 @@ export const metadata: Metadata = {
 };
 
 const NAV = [
-  { href: "/", label: "Today" },
-  { href: "/week", label: "This Week" },
-  { href: "/archive", label: "Archive" },
-  { href: "/ask", label: "Ask" },
-  { href: "/sources", label: "Sources" },
-  { href: "/how-it-works", label: "How it works" },
-];
+  { href: "/", key: "nav_today" },
+  { href: "/week", key: "nav_week" },
+  { href: "/archive", key: "nav_archive" },
+  { href: "/ask", key: "nav_ask" },
+  { href: "/sources", key: "nav_sources" },
+  { href: "/how-it-works", key: "nav_how" },
+] as const;
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const lang = await getLang();
@@ -26,7 +27,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         {/* ── Utility strip ── */}
         <div className="bg-ink text-paper">
           <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-1.5">
-            <span className="kicker text-paper/70">AI-powered economic briefing</span>
+            <span className="kicker text-paper/70">{t(lang, "tagline_top")}</span>
             <LanguageToggle current={lang} />
           </div>
         </div>
@@ -40,9 +41,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <span className="text-gold">101</span>
               </span>
             </Link>
-            <p className="kicker mt-2.5">
-              The world&apos;s news — clustered &amp; explained through an economic lens
-            </p>
+            <p className="kicker mt-2.5">{t(lang, "masthead_sub")}</p>
           </div>
         </div>
 
@@ -55,7 +54,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 href={item.href}
                 className="kicker text-ink-soft transition-colors hover:text-brand"
               >
-                {item.label}
+                {t(lang, item.key)}
               </Link>
             ))}
           </div>
@@ -69,9 +68,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <div className="mx-auto max-w-5xl px-5 py-8">
             <div className="flex flex-col gap-3 text-xs text-ink-soft sm:flex-row sm:items-center sm:justify-between">
               <span className="max-w-xl">
-                Bias ratings and the &quot;neutral&quot; view are{" "}
-                <strong className="text-ink">AI assessments, not fact</strong>. Analysis is
-                for education — <strong className="text-ink">not financial advice</strong>.
+                {t(lang, "footer_disclaimer_a")}{" "}
+                <strong className="text-ink">{t(lang, "footer_ai")}</strong>. {t(lang, "footer_edu")} —{" "}
+                <strong className="text-ink">{t(lang, "footer_notadvice")}</strong>.
               </span>
               <span className="kicker">Local AI · RTX 5070 Ti · No paid APIs</span>
             </div>

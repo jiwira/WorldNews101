@@ -1,5 +1,6 @@
 import { getDataSource } from "@/lib/datasource";
 import { getLang } from "@/lib/lang.server";
+import { t } from "@/lib/ui";
 import { StoryCard } from "@/components/StoryCard";
 import type { Story } from "@/lib/types";
 
@@ -21,7 +22,8 @@ function dayHeading(iso: string): string {
 }
 
 export default async function WeekPage() {
-  const stories = await (await getDataSource(await getLang())).storiesInRange(7);
+  const lang = await getLang();
+  const stories = await (await getDataSource(lang)).storiesInRange(7);
 
   // Group by published day, newest day first.
   const groups = new Map<string, Story[]>();
@@ -36,17 +38,14 @@ export default async function WeekPage() {
   return (
     <div className="space-y-12">
       <header className="space-y-2">
-        <span className="kicker text-brand">This Week</span>
-        <h1 className="font-display text-3xl font-bold text-ink">The week in world &amp; finance</h1>
-        <p className="max-w-prose text-sm text-ink-soft">
-          Every story analysed over the last seven days, grouped by the day it was published and
-          ranked within each day by impact × Indonesia-relevance.
-        </p>
+        <span className="kicker text-brand">{t(lang, "week_kicker")}</span>
+        <h1 className="font-display text-3xl font-bold text-ink">{t(lang, "week_title")}</h1>
+        <p className="max-w-prose text-sm text-ink-soft">{t(lang, "week_intro")}</p>
       </header>
 
       {days.length === 0 ? (
         <p className="border-y border-hair py-16 text-center text-sm text-ink-soft">
-          No analysed stories in the last seven days yet.
+          {t(lang, "week_empty")}
         </p>
       ) : (
         days.map(([date, items]) => (
@@ -54,12 +53,12 @@ export default async function WeekPage() {
             <div className="flex items-baseline justify-between border-b-2 border-ink pb-2">
               <h2 className="font-display text-xl font-bold text-ink">{dayHeading(date)}</h2>
               <span className="kicker">
-                {items.length} {items.length === 1 ? "story" : "stories"}
+                {items.length} {t(lang, items.length === 1 ? "story_one" : "story_many")}
               </span>
             </div>
             <div className="mt-3">
               {items.map((story, i) => (
-                <StoryCard key={story.id} story={story} rank={i + 1} />
+                <StoryCard key={story.id} story={story} rank={i + 1} lang={lang} />
               ))}
             </div>
           </section>

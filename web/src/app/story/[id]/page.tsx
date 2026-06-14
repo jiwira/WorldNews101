@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getDataSource } from "@/lib/datasource";
 import { getLang } from "@/lib/lang.server";
+import { t } from "@/lib/ui";
 import { SentimentBadge } from "@/components/SentimentBadge";
 import { BiasSpread } from "@/components/BiasSpread";
 import { LayerToggle } from "@/components/LayerToggle";
@@ -16,7 +17,8 @@ const LEAN_META: Record<Lean, { label: string; cls: string }> = {
 
 export default async function StoryPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const ds = await getDataSource(await getLang());
+  const lang = await getLang();
+  const ds = await getDataSource(lang);
   const story = await ds.storyById(id);
   if (!story) notFound();
 
@@ -25,7 +27,7 @@ export default async function StoryPage({ params }: { params: Promise<{ id: stri
       {/* ── Header ── */}
       <header className="space-y-4">
         <div className="flex items-center gap-3">
-          <span className="kicker text-brand">Story</span>
+          <span className="kicker text-brand">{t(lang, "lbl_story")}</span>
           <span className="h-px flex-1 bg-hair" />
         </div>
 
@@ -42,21 +44,21 @@ export default async function StoryPage({ params }: { params: Promise<{ id: stri
         {/* At a glance — two distinct, plainly-labelled metrics */}
         <div className="space-y-4 rounded-lg border border-hair bg-surface px-5 py-4">
           <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
-            <span className="kicker">Economic outlook</span>
-            <SentimentBadge sentiment={story.sentiment} showGloss />
+            <span className="kicker">{t(lang, "econ_outlook")}</span>
+            <SentimentBadge sentiment={story.sentiment} showGloss lang={lang} />
           </div>
           <div className="h-px bg-hair" />
           <div>
-            <span className="kicker">How big a deal</span>
+            <span className="kicker">{t(lang, "how_big")}</span>
             <div className="mt-2">
-              <ImpactMeter score={story.impactScore} />
+              <ImpactMeter score={story.impactScore} lang={lang} />
             </div>
           </div>
         </div>
 
         {story.affectedRegions.length > 0 && (
           <div className="flex flex-wrap items-center gap-2">
-            <span className="kicker">Affects</span>
+            <span className="kicker">{t(lang, "affects")}</span>
             {story.affectedRegions.map((region) => (
               <span
                 key={region}
@@ -71,22 +73,22 @@ export default async function StoryPage({ params }: { params: Promise<{ id: stri
 
       {/* ── What this means for you — the centrepiece ── */}
       <section className="rounded-xl border border-hair bg-surface p-6 shadow-sm sm:p-7 border-l-4 border-l-gold">
-        <h2 className="font-display text-xl font-bold text-ink">What this means for you</h2>
-        <p className="kicker mt-1">Plain-language economic read</p>
+        <h2 className="font-display text-xl font-bold text-ink">{t(lang, "means_for_you")}</h2>
+        <p className="kicker mt-1">{t(lang, "plain_read")}</p>
         <div className="mt-4">
-          <LayerToggle beginnerMd={story.beginnerMd} proMd={story.proMd} />
+          <LayerToggle beginnerMd={story.beginnerMd} proMd={story.proMd} lang={lang} />
         </div>
       </section>
 
       {/* ── Media bias spread ── */}
       <section className="space-y-3">
-        <h2 className="font-display text-lg font-bold text-ink">Media bias spread</h2>
-        <BiasSpread spread={story.leanSpread} sourceCount={story.sourceCount} />
+        <h2 className="font-display text-lg font-bold text-ink">{t(lang, "bias_spread")}</h2>
+        <BiasSpread spread={story.leanSpread} sourceCount={story.sourceCount} lang={lang} />
       </section>
 
       {/* ── AI neutral read ── */}
       <section className="space-y-3">
-        <h2 className="font-display text-lg font-bold text-ink">The neutral read</h2>
+        <h2 className="font-display text-lg font-bold text-ink">{t(lang, "neutral_read")}</h2>
         <div className="rounded-xl border border-hair bg-surface p-6 shadow-sm">
           <Markdown>{story.neutralMd}</Markdown>
         </div>
@@ -95,8 +97,8 @@ export default async function StoryPage({ params }: { params: Promise<{ id: stri
       {/* ── Sources ── */}
       <section className="space-y-4">
         <div className="flex items-baseline justify-between border-b-2 border-ink pb-2">
-          <h2 className="font-display text-lg font-bold text-ink">Original sources</h2>
-          <span className="kicker">{story.sourceCount} outlets · AI bias ratings</span>
+          <h2 className="font-display text-lg font-bold text-ink">{t(lang, "original_sources")}</h2>
+          <span className="kicker">{story.sourceCount} {t(lang, "outlets_ratings")}</span>
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">
@@ -126,9 +128,7 @@ export default async function StoryPage({ params }: { params: Promise<{ id: stri
           })}
         </div>
 
-        <p className="text-[11px] text-ink-faint">
-          Bias ratings are AI assessments of framing — not objective or final. Links open in a new tab.
-        </p>
+        <p className="text-[11px] text-ink-faint">{t(lang, "sources_disclaimer")}</p>
       </section>
     </article>
   );

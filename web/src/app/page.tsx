@@ -1,5 +1,6 @@
 import { getDataSource } from "@/lib/datasource";
 import { getLang } from "@/lib/lang.server";
+import { t } from "@/lib/ui";
 import { SentimentBadge } from "@/components/SentimentBadge";
 import { LayerToggle } from "@/components/LayerToggle";
 import { StoryCard } from "@/components/StoryCard";
@@ -19,7 +20,8 @@ function formatDate(iso: string): string {
 }
 
 export default async function Home() {
-  const ds = await getDataSource(await getLang());
+  const lang = await getLang();
+  const ds = await getDataSource(lang);
   const briefing = await ds.latestBriefing();
   const ranked = await ds.rankedStories(10);
 
@@ -29,7 +31,7 @@ export default async function Home() {
       {briefing ? (
         <section>
           <div className="flex items-center gap-3">
-            <span className="kicker text-brand">Today&apos;s Briefing</span>
+            <span className="kicker text-brand">{t(lang, "todays_briefing")}</span>
             <span className="h-px flex-1 bg-hair" />
             <time className="kicker" dateTime={briefing.date}>
               {formatDate(briefing.date)}
@@ -47,26 +49,24 @@ export default async function Home() {
         </section>
       ) : (
         <section className="border-y border-hair py-16 text-center">
-          <p className="font-display text-xl font-bold text-ink">No briefing yet today</p>
-          <p className="mt-2 text-sm text-ink-soft">
-            The AI pipeline runs each morning. Check back soon.
-          </p>
+          <p className="font-display text-xl font-bold text-ink">{t(lang, "no_briefing")}</p>
+          <p className="mt-2 text-sm text-ink-soft">{t(lang, "no_briefing_sub")}</p>
         </section>
       )}
 
       {/* ── Ranked story feed ── */}
       <section>
         <div className="flex items-baseline justify-between border-b-2 border-ink pb-2">
-          <h2 className="font-display text-xl font-bold text-ink">Today&apos;s stories</h2>
-          <span className="kicker hidden sm:inline">Ranked by impact × Indonesia relevance</span>
+          <h2 className="font-display text-xl font-bold text-ink">{t(lang, "todays_stories")}</h2>
+          <span className="kicker hidden sm:inline">{t(lang, "ranked_by")}</span>
         </div>
 
         {ranked.length === 0 ? (
-          <p className="py-10 text-sm text-ink-soft">No stories available yet.</p>
+          <p className="py-10 text-sm text-ink-soft">{t(lang, "no_stories")}</p>
         ) : (
           <div className="mt-3">
             {ranked.map((story, i) => (
-              <StoryCard key={story.id} story={story} rank={i + 1} />
+              <StoryCard key={story.id} story={story} rank={i + 1} lang={lang} />
             ))}
           </div>
         )}
