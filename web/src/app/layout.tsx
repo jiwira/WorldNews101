@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
+import { getLang } from "@/lib/lang.server";
+import { LanguageToggle } from "@/components/LanguageToggle";
 
 export const metadata: Metadata = {
   title: "World & Finance 101",
@@ -16,17 +18,16 @@ const NAV = [
   { href: "/how-it-works", label: "How it works" },
 ];
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const lang = await getLang();
   return (
-    <html lang="en">
+    <html lang={lang}>
       <body className="min-h-screen bg-paper text-ink antialiased">
         {/* ── Utility strip ── */}
         <div className="bg-ink text-paper">
           <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-1.5">
             <span className="kicker text-paper/70">AI-powered economic briefing</span>
-            <span className="kicker hidden text-paper/70 sm:inline">
-              Indonesia edition · Local AI
-            </span>
+            <LanguageToggle current={lang} />
           </div>
         </div>
 

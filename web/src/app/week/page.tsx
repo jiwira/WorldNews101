@@ -1,4 +1,5 @@
 import { getDataSource } from "@/lib/datasource";
+import { getLang } from "@/lib/lang.server";
 import { StoryCard } from "@/components/StoryCard";
 import type { Story } from "@/lib/types";
 
@@ -20,7 +21,7 @@ function dayHeading(iso: string): string {
 }
 
 export default async function WeekPage() {
-  const stories = await (await getDataSource()).storiesInRange(7);
+  const stories = await (await getDataSource(await getLang())).storiesInRange(7);
 
   // Group by published day, newest day first.
   const groups = new Map<string, Story[]>();

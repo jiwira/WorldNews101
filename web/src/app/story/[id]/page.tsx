@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getDataSource } from "@/lib/datasource";
+import { getLang } from "@/lib/lang.server";
 import { SentimentBadge } from "@/components/SentimentBadge";
 import { BiasSpread } from "@/components/BiasSpread";
 import { LayerToggle } from "@/components/LayerToggle";
@@ -15,7 +16,7 @@ const LEAN_META: Record<Lean, { label: string; cls: string }> = {
 
 export default async function StoryPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const ds = await getDataSource();
+  const ds = await getDataSource(await getLang());
   const story = await ds.storyById(id);
   if (!story) notFound();
 

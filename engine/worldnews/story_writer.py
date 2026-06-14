@@ -128,3 +128,10 @@ def write_story_for_cluster(conn, cluster_id: str) -> None:
             ),
         )
     logger.info("Wrote story analysis for cluster %s (impact=%d)", cluster_id, analysis.impact_score)
+
+    # Translate the freshly-written English content into the other languages.
+    try:
+        from worldnews.translate import translate_story
+        translate_story(conn, cluster_id)
+    except Exception as e:
+        logger.debug("translate_story skipped for %s: %s", cluster_id, e)

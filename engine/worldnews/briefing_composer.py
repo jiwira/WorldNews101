@@ -114,6 +114,14 @@ def compose_briefing(conn, briefing_date: date | None = None) -> str:
         "Composed briefing %s for %s: %d stories",
         briefing_id, briefing_date, len(top)
     )
+
+    # Translate the briefing into the other languages.
+    try:
+        from worldnews.translate import translate_briefing
+        translate_briefing(conn, briefing_id)
+    except Exception as e:
+        logger.debug("translate_briefing skipped for %s: %s", briefing_id, e)
+
     return briefing_id
 
 

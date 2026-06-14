@@ -1,4 +1,5 @@
 import { getDataSource } from "@/lib/datasource";
+import { getLang } from "@/lib/lang.server";
 import { SentimentBadge } from "@/components/SentimentBadge";
 import { LayerToggle } from "@/components/LayerToggle";
 import { StoryCard } from "@/components/StoryCard";
@@ -18,7 +19,7 @@ function formatDate(iso: string): string {
 }
 
 export default async function Home() {
-  const ds = await getDataSource();
+  const ds = await getDataSource(await getLang());
   const briefing = await ds.latestBriefing();
   const ranked = await ds.rankedStories(10);
 

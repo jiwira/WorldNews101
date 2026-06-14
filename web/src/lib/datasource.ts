@@ -14,50 +14,32 @@ export interface DataSource {
   storiesInRange(days: number): Promise<Story[]>;
 }
 
-let _ds: DataSource | null = null;
-let _resolving = false;
 const _seed = new SeedDataSource();
+// Whether the live DB is usable, resolved once per process (null = not yet checked).
+let _useDb: boolean | null = null;
 
 /**
- * Returns the best available DataSource.
- * - If DATABASE_URL is set and the DB has data → DbDataSource
- * - Otherwise → SeedDataSource
- * Safe to call from any server component; never throws.
+ * Returns the best available DataSource for the given language.
+ * - DATABASE_URL set and the DB has data → DbDataSource bound to `lang`
+ * - Otherwise → SeedDataSource (English seed content)
+ * Safe to call from any server component; never throws. The DB-availability decision is
+ * cached process-wide; the cheap per-lang DbDataSource shares one connection pool.
  */
-export async function getDataSource(): Promise<DataSource> {
-  if (_ds) return _ds;
-  if (_resolving) return _seed; // Re-entrant guard during startup
-
+export async function getDataSource(lang: string = "en"): Promise<DataSource> {
   const dbUrl = process.env.DATABASE_URL;
-  if (!dbUrl) {
-    _ds = _seed;
-    return _ds;
-  }
+  if (!dbUrl || _useDb === false) return _seed;
 
-  _resolving = true;
   try {
     const { DbDataSource } = await import("./db-datasource");
-    const candidate = new DbDataSource(dbUrl);
-
-    // Quick liveness probe — if it resolves with data, use it
-    const briefings = await candidate.recentBriefings(1);
-    if (briefings.length > 0) {
-      _ds = candidate;
-      return _ds;
+    if (_useDb === null) {
+      const probe = new DbDataSource(dbUrl, "en");
+      const briefings = await probe.recentBriefings(1);
+      const stories = briefings.length ? briefings : await probe.rankedStories(1);
+      _useDb = stories.length > 0;
     }
-    const stories = await candidate.rankedStories(1);
-    if (stories.length > 0) {
-      _ds = candidate;
-      return _ds;
-    }
-    // DB reachable but empty — fall back to seed
-    _ds = _seed;
-    return _ds;
+    return _useDb ? new DbDataSource(dbUrl, lang) : _seed;
   } catch {
-    // DB unavailable — fall through to seed
-    _ds = _seed;
-    return _ds;
-  } finally {
-    _resolving = false;
+    _useDb = false;
+    return _seed;
   }
 }
