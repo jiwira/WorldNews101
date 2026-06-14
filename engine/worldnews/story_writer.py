@@ -7,6 +7,7 @@ import logging
 from worldnews.crew.crew import analyze_cluster
 from worldnews.fulltext import fetch_fulltext
 from worldnews.reader_format import format_reader_md
+from worldnews.pro_analysis import deep_pro_md
 from worldnews.impact_score import score_impact
 from worldnews.headline import english_headline
 from worldnews.sources_memory import get_reputation, update_reputation
@@ -74,6 +75,12 @@ def write_story_for_cluster(conn, cluster_id: str) -> None:
         analysis.beginner_md = format_reader_md(analysis, _topic)
     except Exception as e:
         logger.debug("reader_format skipped for %s: %s", cluster_id, e)
+
+    # Economist-grade deep analysis for the pro layer (the crew editor under-delivers here).
+    try:
+        analysis.pro_md = deep_pro_md(analysis, _topic)
+    except Exception as e:
+        logger.debug("deep_pro_md skipped for %s: %s", cluster_id, e)
 
     # Calibrated impact score (the crew editor under-scores; this fixes ranking).
     try:
