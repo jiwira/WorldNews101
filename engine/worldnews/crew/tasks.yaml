@@ -87,6 +87,10 @@ editor_task:
     4) Markets analysis.
 
     HARD RULES for the reader-facing text:
+    - LANGUAGE: write neutral_md, beginner_md, pro_md AND impact_summary in ENGLISH ONLY,
+      even when the source articles are in Indonesian, Chinese or another language. The
+      English version is canonical (other languages are translated separately downstream).
+      NEVER mix languages or include non-English characters in these fields.
     - EFFECTS MUST BE SPECIFIC TO THIS STORY. The #1 failure to avoid: pasting the same
       generic "fuel +1-2%, food pricier, electricity up, jobs" bullets onto every story.
       Do NOT run down a checklist of everyday items. Pick ONLY the 1-3 channels THIS

@@ -34,9 +34,11 @@ story headline "{topic}"; do not contradict or invent the opposite of what the h
 **What to do or watch**
 - 1-3 specific, practical bullets.
 
-RULES: Be concrete and local. Trace real cause->effect. NEVER invent a fuel/food/FX link that
-does not follow from the event. BANNED: "highlights the potential", "underscores the importance",
-"signals the need", "transformative". Output ONLY the markdown block, no preamble.
+RULES: Write in ENGLISH ONLY (even if the analysis contains other languages — never include
+Chinese/Indonesian characters). Be concrete and local. Trace real cause->effect. NEVER invent a
+fuel/food/FX link that does not follow from the event. BANNED: "highlights the potential",
+"underscores the importance", "signals the need", "transformative". Output ONLY the markdown
+block, no preamble.
 
 --- EXAMPLE for a US rate hike ---
 **What happened** — The US central bank raised interest rates again.
