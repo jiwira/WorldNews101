@@ -29,6 +29,7 @@ DEFAULT_RSS_FEEDS: list[tuple[str, str]] = [
     ("https://www.antaranews.com/rss/ekonomi.xml", "Antara"),
     ("https://finance.detik.com/rss", "Detik Finance"),
     ("https://www.cnbcindonesia.com/market/rss", "CNBC Indonesia"),
+    ("https://rss.tempo.co/terkini", "Tempo"),   # general / latest news
     ("https://rss.tempo.co/bisnis", "Tempo"),
     ("https://rss.tempo.co/dunia", "Tempo"),
     ("https://katadata.co.id/rss", "Katadata"),
