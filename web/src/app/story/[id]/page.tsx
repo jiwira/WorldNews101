@@ -71,7 +71,15 @@ export default async function StoryPage({ params }: { params: Promise<{ id: stri
         )}
       </header>
 
-      {/* ── What this means for you — the centrepiece ── */}
+      {/* ── The news, first: a neutral summary so the reader knows WHAT happened ── */}
+      <section className="space-y-3">
+        <h2 className="font-display text-lg font-bold text-ink">{t(lang, "neutral_read")}</h2>
+        <div className="rounded-xl border border-hair bg-surface p-6 shadow-sm">
+          <Markdown>{story.neutralMd}</Markdown>
+        </div>
+      </section>
+
+      {/* ── Then: what this means for you — the centrepiece ── */}
       <section className="rounded-xl border border-hair bg-surface p-6 shadow-sm sm:p-7 border-l-4 border-l-gold">
         <h2 className="font-display text-xl font-bold text-ink">{t(lang, "means_for_you")}</h2>
         <p className="kicker mt-1">{t(lang, "plain_read")}</p>
@@ -84,14 +92,6 @@ export default async function StoryPage({ params }: { params: Promise<{ id: stri
       <section className="space-y-3">
         <h2 className="font-display text-lg font-bold text-ink">{t(lang, "bias_spread")}</h2>
         <BiasSpread spread={story.leanSpread} sourceCount={story.sourceCount} lang={lang} />
-      </section>
-
-      {/* ── AI neutral read ── */}
-      <section className="space-y-3">
-        <h2 className="font-display text-lg font-bold text-ink">{t(lang, "neutral_read")}</h2>
-        <div className="rounded-xl border border-hair bg-surface p-6 shadow-sm">
-          <Markdown>{story.neutralMd}</Markdown>
-        </div>
       </section>
 
       {/* ── Sources ── */}

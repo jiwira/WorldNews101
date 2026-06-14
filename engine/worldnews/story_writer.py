@@ -8,6 +8,7 @@ from worldnews.crew.crew import analyze_cluster
 from worldnews.fulltext import fetch_fulltext
 from worldnews.reader_format import format_reader_md
 from worldnews.impact_score import score_impact
+from worldnews.headline import english_headline
 from worldnews.sources_memory import get_reputation, update_reputation
 
 logger = logging.getLogger(__name__)
@@ -80,6 +81,13 @@ def write_story_for_cluster(conn, cluster_id: str) -> None:
     except Exception as e:
         logger.debug("impact_score skipped for %s: %s", cluster_id, e)
 
+    # Canonical English headline (raw cluster topics are often non-English).
+    english_topic = _topic
+    try:
+        english_topic = english_headline(_topic, analysis.impact_summary, analysis.neutral_md)
+    except Exception as e:
+        logger.debug("english_headline skipped for %s: %s", cluster_id, e)
+
     # After crew run: update source reputation for each article
     for art in articles:
         lean_raw = art.get("lean") or ""
@@ -103,6 +111,7 @@ def write_story_for_cluster(conn, cluster_id: str) -> None:
         cur.execute(
             """
             UPDATE stories SET
+                topic            = %s,
                 neutral_md       = %s,
                 beginner_md      = %s,
                 pro_md           = %s,
@@ -115,6 +124,7 @@ def write_story_for_cluster(conn, cluster_id: str) -> None:
             WHERE id = %s
             """,
             (
+                english_topic,
                 analysis.neutral_md,
                 analysis.beginner_md,
                 analysis.pro_md,
