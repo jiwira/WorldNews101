@@ -81,7 +81,7 @@ def format_reader_md(analysis, topic: str) -> str:
         neutral_md=analysis.neutral_md,
         pro_md=analysis.pro_md,
     )
-    for attempt in range(2):
+    for attempt in range(3):
         try:
             resp = httpx.post(
                 f"{CONFIG.ollama_base_url}/api/generate",
@@ -100,4 +100,15 @@ def format_reader_md(analysis, topic: str) -> str:
             logger.warning("reader_format attempt %d malformed; retrying", attempt + 1)
         except Exception as e:
             logger.warning("reader_format call failed: %s", e)
-    return fallback
+
+    # Never return garbage: use the crew's beginner_md only if it's well-formed; otherwise
+    # synthesize a minimal valid block from the (clean) impact summary.
+    if _looks_valid(fallback):
+        return fallback
+    summary = (analysis.impact_summary or "").strip() or "See the neutral summary above."
+    return (
+        f"**What happened** — {summary}\n\n"
+        f"**Who it affects**\n- This is the headline economic takeaway; "
+        f"see the neutral summary for the full picture.\n\n"
+        f"**What to do or watch**\n- Watch how this develops in the coming days."
+    )
