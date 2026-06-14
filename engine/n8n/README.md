@@ -5,7 +5,7 @@ FastAPI endpoint. n8n only *schedules*; the engine does ingest → cluster → C
 briefing.
 
 ```
-n8n (Schedule 06:00)  →  POST /run-daily  →  engine pipeline  →  CrewAI  →  Postgres  →  website
+n8n (Schedule 02:00)  →  POST /run-daily  →  engine pipeline  →  CrewAI  →  Postgres  →  website
 ```
 
 ## 1. Run the engine API (the thing n8n calls)
