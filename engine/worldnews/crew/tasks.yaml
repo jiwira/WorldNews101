@@ -114,13 +114,18 @@ editor_task:
     beginner_md MUST be markdown in EXACTLY this structure:
       **What happened** — one plain sentence a 15-year-old understands.
 
-      **Why it matters to you**
-      - 1-3 bullets covering ONLY the channels THIS story actually moves (often just one).
-        Each bullet specific to this event with direction/size. If it barely affects daily
-        costs, say so in one bullet and state what it DOES affect instead. Do not pad to 3.
+      **Who it affects**
+      - One bullet per group THIS story actually affects, formatted "**<group>:** <specific
+        effect with direction/size>". Choose ONLY the relevant groups and name them precisely.
+        These are EXAMPLES, not a checklist — pick whatever fits the story: people living in
+        Indonesia, people living outside Indonesia, business owners (which kind), employees
+        (which sector), investors/savers, importers/exporters, consumers, developers, etc.
+      - Most stories affect 2-4 groups. Do NOT list groups a story barely touches just to
+        fill space, and never repeat the same generic groups on every story. If a group is
+        only mildly affected, say so honestly.
 
       **What to do or watch**
-      - 2-3 specific, actionable bullets (budget for X, watch Y announcement/number, Z sector
+      - 1-3 specific, actionable bullets (budget for X, watch Y announcement/number, Z sector
         reacts first). Practical and grounded — this is education, not personalised financial advice.
 
     pro_md: expert depth (mechanisms, game theory, macro) and MUST end with a
