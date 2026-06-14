@@ -20,9 +20,18 @@ DEFAULT_RSS_FEEDS: list[tuple[str, str]] = [
     ("http://feeds.marketwatch.com/marketwatch/topstories/", "MarketWatch"),
     ("https://www.economist.com/finance-and-economics/rss.xml", "The Economist"),
     ("https://www.theguardian.com/business/rss", "The Guardian"),
+    ("https://finance.yahoo.com/news/rssindex", "Yahoo Finance"),
+    ("https://www.investing.com/rss/news.rss", "Investing.com"),
+    ("http://rss.cnn.com/rss/money_latest.rss", "CNN Business"),
+    ("https://fortune.com/feed/", "Fortune"),
+    ("https://www.forbes.com/business/feed/", "Forbes"),
+    # Indonesia-focused
     ("https://www.antaranews.com/rss/ekonomi.xml", "Antara"),
     ("https://finance.detik.com/rss", "Detik Finance"),
     ("https://www.cnbcindonesia.com/market/rss", "CNBC Indonesia"),
+    ("https://rss.tempo.co/bisnis", "Tempo"),
+    ("https://rss.tempo.co/dunia", "Tempo"),
+    ("https://katadata.co.id/rss", "Katadata"),
 ]
 
 # GDELT is fully open but rate-limited (429s are skipped); keep the query set small
