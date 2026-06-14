@@ -52,6 +52,22 @@ class AskResponse(BaseModel):
 
 # ── Background jobs ──────────────────────────────────────────────────────────
 
+def _release_gpu() -> None:
+    """Unload any Ollama models from VRAM so the GPU is freed right after a run (instead of
+    waiting for Ollama's keep-alive timeout)."""
+    try:
+        import httpx
+        base = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
+        loaded = httpx.get(f"{base}/api/ps", timeout=10).json().get("models", [])
+        for m in loaded:
+            name = m.get("name")
+            if name:
+                httpx.post(f"{base}/api/generate", json={"model": name, "keep_alive": 0}, timeout=10)
+        logger.info("Released %d model(s) from VRAM", len(loaded))
+    except Exception as e:
+        logger.warning("GPU release failed: %s", e)
+
+
 def _run_daily_job(job_id: str) -> None:
     """Background: ingest → cluster → analyze the day's TOP (most-covered) clusters →
     compose briefing. Bounded to TOP_N so a single trigger finishes in a sane time; each
@@ -94,6 +110,7 @@ def _run_daily_job(job_id: str) -> None:
     except Exception as e:
         logger.error("Daily job %s failed: %s", job_id, e)
     finally:
+        _release_gpu()
         _job_running = False
 
 
