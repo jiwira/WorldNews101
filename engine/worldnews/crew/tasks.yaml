@@ -68,8 +68,11 @@ markets_task:
       AWAY from {home_region}? State the direction. A big foreign listing or rate move
       can divert portfolio flows and strengthen the USD — an opportunity cost for
       emerging markets, NOT automatically a local benefit.
-    - Cost-of-living impact on an ordinary {home_region} household: fuel, food,
-      electricity, loan/mortgage rates, jobs — with direction and rough magnitude
+    - Household impact ONLY through the channels THIS story actually reaches. Trace the
+      real chain; do not run down a fixed fuel/food/electricity/jobs list. Many stories
+      touch only one channel, and some (e.g. a foreign tech/AI policy) barely touch a
+      typical household's daily costs at all — if so, say that and name what it DOES affect
+      (a specific industry, investors, developers, the tech sector), with direction/size.
   agent: markets_analyst
   context:
     - curate_task
@@ -84,13 +87,21 @@ editor_task:
     4) Markets analysis.
 
     HARD RULES for the reader-facing text:
-    - Be CONCRETE and LOCAL to {home_region}. Name everyday things: pump/fuel prices,
-      groceries, electricity, mortgage/loan rates, the rupiah (IDR), jobs in named sectors.
-    - Give a DIRECTION and rough SIZE wherever possible ("fuel +5-10%", "IDR weaker vs USD",
-      "imported goods pricier in the coming weeks"). Use ranges, not false precision.
-    - Every effect traces a mechanism: event -> channel -> who pays. BANNED phrases:
-      "highlights the potential", "underscores the importance", "signals the need",
-      "transformative", and any sentence that would survive being copied to an unrelated story.
+    - EFFECTS MUST BE SPECIFIC TO THIS STORY. The #1 failure to avoid: pasting the same
+      generic "fuel +1-2%, food pricier, electricity up, jobs" bullets onto every story.
+      Do NOT run down a checklist of everyday items. Pick ONLY the 1-3 channels THIS
+      event actually moves, traced through a real mechanism (event -> channel -> who pays).
+      A reader must NOT be able to guess these bullets came from a different story.
+    - It is correct and expected that many stories barely touch a typical person's daily
+      costs. If so, SAY SO plainly ("little direct effect on your day-to-day costs") and
+      explain what it DOES affect — a specific industry, investors, developers, the tech
+      sector, access to a tool, etc. NEVER manufacture a fuel/FX/grocery link that does
+      not actually follow from the event (e.g. an AI export rule does NOT move pump prices).
+    - Be CONCRETE and LOCAL: when a channel genuinely applies, give DIRECTION and rough
+      SIZE ("IDR weaker vs USD", "nickel exporters gain") — ranges, not false precision.
+    - BANNED phrases: "highlights the potential", "underscores the importance",
+      "signals the need", "transformative", and any sentence that would survive being
+      copied to an unrelated story.
     - Be REALISTIC, not aspirational. Describe what will LIKELY actually happen and who
       gains or loses — do NOT assume {home_region}'s government or firms will act
       idealistically (e.g. "Indonesia should invest in high-tech"). If an event mainly
@@ -104,7 +115,9 @@ editor_task:
       **What happened** — one plain sentence a 15-year-old understands.
 
       **Why it matters to you**
-      - 2-3 bullets: concrete effect on prices / jobs / savings, each with direction and rough size.
+      - 1-3 bullets covering ONLY the channels THIS story actually moves (often just one).
+        Each bullet specific to this event with direction/size. If it barely affects daily
+        costs, say so in one bullet and state what it DOES affect instead. Do not pad to 3.
 
       **What to do or watch**
       - 2-3 specific, actionable bullets (budget for X, watch Y announcement/number, Z sector
