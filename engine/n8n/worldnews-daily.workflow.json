@@ -1,0 +1,39 @@
+{
+  "id": "worldnewsdaily0001",
+  "name": "WorldNews Daily Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [ { "field": "cronExpression", "expression": "0 6 * * *" } ] }
+      },
+      "id": "a1111111-1111-4111-8111-111111111111",
+      "name": "Daily 06:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [260, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://172.17.0.1:8077/run-daily",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [ { "name": "X-Crew-Token", "value": "__CREW_TOKEN__" } ]
+        },
+        "options": { "timeout": 10000 }
+      },
+      "id": "b2222222-2222-4222-8222-222222222222",
+      "name": "Trigger run-daily",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 300]
+    }
+  ],
+  "connections": {
+    "Daily 06:00": {
+      "main": [ [ { "node": "Trigger run-daily", "type": "main", "index": 0 } ] ]
+    }
+  },
+  "settings": { "executionOrder": "v1" },
+  "active": false
+}

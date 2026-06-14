@@ -9,6 +9,9 @@ export interface DataSource {
   storiesByIds(ids: string[]): Promise<Story[]>;
   /** Stories ordered by impactScore × regionRelevance descending */
   rankedStories(limit: number): Promise<Story[]>;
+  /** Analyzed stories published within the last `days` days, each carrying its
+      published `date`, newest first. Powers the weekly view. */
+  storiesInRange(days: number): Promise<Story[]>;
 }
 
 let _ds: DataSource | null = null;

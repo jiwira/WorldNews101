@@ -13,11 +13,8 @@ LIMIT = int(sys.argv[1]) if len(sys.argv) > 1 else 6
 
 with get_conn() as conn, conn.cursor() as cur:
     # Prefer the richest clusters (most articles); re-analyze whatever is already analyzed.
-    # Only refresh analyzed stories that still use the OLD format (no structured
-    # "What happened" section) — skip ones already on the new concrete format.
     cur.execute(
-        "SELECT id FROM stories "
-        "WHERE neutral_md IS NOT NULL AND beginner_md NOT LIKE '%%What happened%%' "
+        "SELECT id FROM stories WHERE neutral_md IS NOT NULL "
         "ORDER BY source_count DESC, created_at DESC LIMIT %s",
         (LIMIT,),
     )

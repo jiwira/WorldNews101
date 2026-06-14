@@ -27,6 +27,9 @@ export interface Story {
   affectedRegions: string[];
   /** 0–1: relevance specifically to Indonesian reader/economy */
   regionRelevance: number;
+  /** ISO yyyy-mm-dd the story was published (newest source article). Optional;
+      set by feeds that date stories, e.g. the weekly view. */
+  date?: string;
 }
 
 export interface Briefing {

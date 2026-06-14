@@ -9,6 +9,30 @@ from worldnews.ingest.gdelt import fetch_gdelt
 
 log = logging.getLogger(__name__)
 
+# Default sources for the daily run — verified free/open RSS (no API key), mixing
+# wires, business dailies and opinion-leaning outlets so the bias-spread is meaningful.
+# Global finance + general, then Indonesia-focused. See docs/08-EDITORIAL-SOURCES.md.
+DEFAULT_RSS_FEEDS: list[tuple[str, str]] = [
+    ("https://feeds.bbci.co.uk/news/business/rss.xml", "BBC"),
+    ("https://www.aljazeera.com/xml/rss/all.xml", "Al Jazeera"),
+    ("https://www.cnbc.com/id/15839135/device/rss/rss.html", "CNBC"),          # Markets
+    ("https://www.cnbc.com/id/20910258/device/rss/rss.html", "CNBC"),          # Economy
+    ("http://feeds.marketwatch.com/marketwatch/topstories/", "MarketWatch"),
+    ("https://www.economist.com/finance-and-economics/rss.xml", "The Economist"),
+    ("https://www.theguardian.com/business/rss", "The Guardian"),
+    ("https://www.antaranews.com/rss/ekonomi.xml", "Antara"),
+    ("https://finance.detik.com/rss", "Detik Finance"),
+    ("https://www.cnbcindonesia.com/market/rss", "CNBC Indonesia"),
+]
+
+# GDELT is fully open but rate-limited (429s are skipped); keep the query set small
+# and tilted to Indonesia's economy.
+DEFAULT_GDELT_QUERIES: list[str] = [
+    "Indonesia economy",
+    "rupiah exchange rate",
+    "palm oil price",
+]
+
 
 def ingest(conn, rss_feeds: list[tuple[str, str]], gdelt_queries: list[str],
            gdelt_delay: float = 6.0) -> int:
@@ -75,7 +99,11 @@ def cluster_pending(conn, threshold: float = 0.82) -> int:
     return len(groups)
 
 
-def run_all(rss_feeds, gdelt_queries, threshold: float = 0.82) -> dict:
+def run_all(rss_feeds=None, gdelt_queries=None, threshold: float = 0.82) -> dict:
+    if rss_feeds is None:
+        rss_feeds = DEFAULT_RSS_FEEDS
+    if gdelt_queries is None:
+        gdelt_queries = DEFAULT_GDELT_QUERIES
     with get_conn() as conn:
         ingested = ingest(conn, rss_feeds, gdelt_queries)
         embedded = embed_unembedded(conn)

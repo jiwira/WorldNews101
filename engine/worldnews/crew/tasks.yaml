@@ -64,6 +64,10 @@ markets_task:
       "IDR weaker vs USD") across currencies, commodities, equities
     - Sector-level winners and losers — name the specific sectors/companies
     - Transmission mechanism stated explicitly: event -> channel -> who pays
+    - CAPITAL & INVESTMENT FLOWS: does this pull global capital/investment TOWARD or
+      AWAY from {home_region}? State the direction. A big foreign listing or rate move
+      can divert portfolio flows and strengthen the USD — an opportunity cost for
+      emerging markets, NOT automatically a local benefit.
     - Cost-of-living impact on an ordinary {home_region} household: fuel, food,
       electricity, loan/mortgage rates, jobs — with direction and rough magnitude
   agent: markets_analyst
@@ -87,6 +91,12 @@ editor_task:
     - Every effect traces a mechanism: event -> channel -> who pays. BANNED phrases:
       "highlights the potential", "underscores the importance", "signals the need",
       "transformative", and any sentence that would survive being copied to an unrelated story.
+    - Be REALISTIC, not aspirational. Describe what will LIKELY actually happen and who
+      gains or loses — do NOT assume {home_region}'s government or firms will act
+      idealistically (e.g. "Indonesia should invest in high-tech"). If an event mainly
+      benefits foreign actors or pulls capital abroad, say so plainly.
+    - For foreign events, ask: does money / capital / attention flow TOWARD or AWAY from
+      {home_region}? Name the direction and what it means for a local saver or investor.
     - The reader must finish knowing (a) what changed, (b) how it hits their wallet or job,
       (c) what to do or watch next.
 
@@ -109,7 +119,10 @@ editor_task:
     Then output ONLY a JSON object (no text before or after) with exactly these fields:
     {{
       "sentiment": "bullish" or "neutral" or "bearish",
-      "impact_score": integer 0-100 (economic impact severity),
+      "impact_score": integer 0-100 — economic significance INCLUDING structural/national
+        importance to {home_region}. A national policy on key exports/imports (palm oil,
+        nickel, fuel) is HIGH (70-95) even if global markets barely react; only true
+        celebrity/sport/novelty noise is low (<20). Do not under-score locally pivotal news,
       "region_relevance": float 0.0-1.0 (proximity/relevance to {home_region}),
       "impact_summary": "one concrete sentence: why this matters to {home_region} readers",
       "affected_regions": ["list", "of", "regions"],

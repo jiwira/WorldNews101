@@ -22,3 +22,9 @@ node_modules/
 
 # OS
 .DS_Store
+
+# Playwright screenshot artifacts
+.playwright-mcp/
+/home.png
+/story.png
+/*.png

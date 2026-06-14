@@ -443,4 +443,19 @@ export class SeedDataSource implements DataSource {
       .sort((a, b) => b.impactScore * b.regionRelevance - a.impactScore * a.regionRelevance)
       .slice(0, limit);
   }
+
+  async storiesInRange(_days: number): Promise<Story[]> {
+    // Spread the demo stories across recent days (2 per day) so the weekly view
+    // has something to group when running on seed content.
+    const [y, m, d] = BRIEFING.date.split("-").map(Number);
+    return [...STORIES]
+      .sort((a, b) => b.impactScore * b.regionRelevance - a.impactScore * a.regionRelevance)
+      .map((s, i) => {
+        const dt = new Date(y, m - 1, d - Math.floor(i / 2));
+        const iso = `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2, "0")}-${String(
+          dt.getDate(),
+        ).padStart(2, "0")}`;
+        return { ...s, date: iso };
+      });
+  }
 }
