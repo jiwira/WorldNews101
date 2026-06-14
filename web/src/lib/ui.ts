@@ -78,6 +78,12 @@ const S = {
   lean_right_long: { en: "right-leaning", id: "condong kanan", zh: "右倾" },
   bias_short_disclaimer: { en: "AI assessment of framing — not an objective rating.", id: "Asesmen AI atas framing — bukan penilaian objektif.", zh: "AI 对报道框架的评估 —— 并非客观评级。" },
   sources_word: { en: "sources", id: "sumber", zh: "来源" },
+  // update button
+  update_news: { en: "Update news", id: "Perbarui berita", zh: "更新新闻" },
+  update_running: { en: "Updating…", id: "Memperbarui…", zh: "更新中…" },
+  update_started: { en: "Update started — new stories arrive in a few minutes.", id: "Pembaruan dimulai — berita baru muncul dalam beberapa menit.", zh: "更新已开始 —— 新闻将在几分钟内出现。" },
+  update_inprogress: { en: "An update is already running.", id: "Pembaruan sedang berjalan.", zh: "更新已在进行中。" },
+  update_offline: { en: "Update engine offline.", id: "Mesin pembaruan tak aktif.", zh: "更新引擎离线。" },
 } satisfies Record<string, Str>;
 
 export type UIKey = keyof typeof S;

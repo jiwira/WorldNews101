@@ -4,6 +4,7 @@ import "./globals.css";
 import { getLang } from "@/lib/lang.server";
 import { t } from "@/lib/ui";
 import { LanguageToggle } from "@/components/LanguageToggle";
+import { UpdateButton } from "@/components/UpdateButton";
 
 export const metadata: Metadata = {
   title: "World & Finance 101",
@@ -28,7 +29,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <div className="bg-ink text-paper">
           <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-1.5">
             <span className="kicker text-paper/70">{t(lang, "tagline_top")}</span>
-            <LanguageToggle current={lang} />
+            <div className="flex items-center gap-4">
+              <UpdateButton lang={lang} />
+              <span className="text-paper/30" aria-hidden>·</span>
+              <LanguageToggle current={lang} />
+            </div>
           </div>
         </div>
 
