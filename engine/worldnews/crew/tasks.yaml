@@ -62,8 +62,14 @@ markets_task:
     A CONCRETE markets analysis (no vague phrasing) covering:
     - Immediate price impacts WITH direction and rough size (e.g. "Brent +3-5%",
       "IDR weaker vs USD") across currencies, commodities, equities
+    - ASSET-BY-ASSET reactions with the WHY (the economic mechanism), for the assets this
+      story moves: gold/safe-havens, oil, the rupiah (IDR), Indonesian equities (JCI) and
+      sectors, bonds/yields, key commodities (palm oil, nickel, coal). Think like a macro
+      strategist: e.g. "war -> supply risk + risk-off -> gold and Brent up"; "US hike ->
+      rate differential -> IDR down -> JCI down as foreigners sell".
     - Sector-level winners and losers — name the specific sectors/companies
-    - Transmission mechanism stated explicitly: event -> channel -> who pays
+    - Transmission mechanism stated explicitly as a multi-step chain: event -> channel ->
+      channel -> who pays / which asset moves
     - CAPITAL & INVESTMENT FLOWS: does this pull global capital/investment TOWARD or
       AWAY from {home_region}? State the direction. A big foreign listing or rate move
       can divert portfolio flows and strengthen the USD — an opportunity cost for
@@ -132,8 +138,27 @@ editor_task:
       - 1-3 specific, actionable bullets (budget for X, watch Y announcement/number, Z sector
         reacts first). Practical and grounded — this is education, not personalised financial advice.
 
-    pro_md: expert depth (mechanisms, game theory, macro) and MUST end with a
-    "**Signals to watch**" markdown bullet list of concrete data/market signals.
+    pro_md: a WORLD-CLASS ECONOMIST'S deep analysis (English). Reason mechanistically with
+    explicit causal chains, naming the linkages and the DIRECTION of each asset move and WHY.
+    Use this exact markdown structure:
+      **Transmission mechanism** — trace the chain step by step
+      (event -> channel -> channel -> outcome), e.g.
+      "US rate hike -> wider US-Indonesia rate differential -> capital flows to USD ->
+       IDR weakens -> foreign investors sell JCI -> Indonesian equities fall -> BI likely
+       hikes to defend the rupiah -> domestic loan rates rise."
+      **Markets & asset reactions** — bullets, ONLY for assets this story actually moves,
+      each "**<asset>:** direction + rough size + why". Consider as relevant: gold &
+      safe-havens (rise on war/risk-off), oil/Brent, the rupiah (IDR/USD), Indonesian
+      equities (JCI) & specific sectors, bonds/yields (SBN), key commodities (palm oil,
+      nickel, coal). Examples of the depth expected:
+      "Gold: +3-8% — armed conflict triggers a safe-haven bid and a risk premium on supply."
+      "JCI: lower — higher US yields pull portfolio capital out of EM equities."
+      **Scenarios** — 2-3 conditional "if X then Y" paths (base / upside / downside).
+      **Second-order & contagion effects** — knock-on effects beyond the obvious.
+      **Historical analogue** — one comparable past episode and how it played out (if apt).
+      **Signals to watch** — concrete data/levels/dates (e.g. IDR/USD level, BI meeting date,
+      Brent, DXY, JCI, the specific announcement).
+    Be specific and quantitative where possible; never generic.
 
     impact_summary: ONE punchy, concrete sentence answering "why should a {home_region}
     reader care?" — usable as a card teaser.
