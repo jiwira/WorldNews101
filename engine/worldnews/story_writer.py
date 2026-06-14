@@ -6,6 +6,7 @@ import logging
 
 from worldnews.crew.crew import analyze_cluster
 from worldnews.fulltext import fetch_fulltext
+from worldnews.reader_format import format_reader_md
 from worldnews.sources_memory import get_reputation, update_reputation
 
 logger = logging.getLogger(__name__)
@@ -60,6 +61,17 @@ def write_story_for_cluster(conn, cluster_id: str) -> None:
 
     # Run the crew
     analysis = analyze_cluster(articles)
+
+    # Reliable reader-guidance pass: reformat beginner_md into the strict persona
+    # structure via a focused single-output call (the crew's JSON beginner_md is flaky).
+    with conn.cursor() as cur:
+        cur.execute("SELECT topic FROM stories WHERE id = %s", (cluster_id,))
+        _row = cur.fetchone()
+    _topic = (_row[0] if _row else None) or (articles[0].get("title") if articles else "")
+    try:
+        analysis.beginner_md = format_reader_md(analysis, _topic)
+    except Exception as e:
+        logger.debug("reader_format skipped for %s: %s", cluster_id, e)
 
     # After crew run: update source reputation for each article
     for art in articles:

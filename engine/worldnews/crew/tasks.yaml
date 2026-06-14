@@ -149,6 +149,20 @@ editor_task:
       "beginner_md": "the 3-section structure above, as markdown",
       "pro_md": "expert analysis ending with **Signals to watch**"
     }}
+
+    FOLLOW THIS EXAMPLE EXACTLY for shape and tone (note beginner_md uses \n for newlines,
+    and the groups are chosen to fit the story — yours will differ):
+    {{
+      "sentiment": "bearish",
+      "impact_score": 65,
+      "region_relevance": 0.8,
+      "impact_summary": "A US rate hike pulls capital toward the dollar, pressuring the rupiah and making Indonesian loans pricier.",
+      "affected_regions": ["Indonesia", "United States"],
+      "lean_spread": {{"left": 2, "center": 4, "right": 1}},
+      "neutral_md": "Coverage agrees the Fed raised rates; outlets differ on whether it signals strength or recession risk.",
+      "beginner_md": "**What happened** — The US central bank raised interest rates again.\n\n**Who it affects**\n- **People with loans in Indonesia:** mortgage and car-loan rates likely tick up as Bank Indonesia follows to defend the rupiah.\n- **Importers & businesses buying in USD:** costs rise as the rupiah weakens versus the dollar.\n- **Exporters (palm oil, nickel):** a weaker rupiah makes their goods cheaper abroad — a relative winner.\n\n**What to do or watch**\n- Lock in fixed-rate loans before further hikes.\n- Watch Bank Indonesia's next rate decision.",
+      "pro_md": "Higher US rates widen the rate differential, prompting capital outflows from EM... \n\n**Signals to watch**\n- DXY, IDR/USD, BI 7-day reverse repo rate"
+    }}
   expected_output: >
     A valid JSON object with these exact fields: sentiment (bullish/neutral/bearish),
     impact_score (0-100 int), region_relevance (0.0-1.0 float), impact_summary (str),
