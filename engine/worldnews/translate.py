@@ -88,6 +88,29 @@ def translate_fields(fields: dict[str, str], lang_code: str) -> dict[str, str] |
 STORY_FIELDS = ["topic", "impact_summary", "neutral_md", "beginner_md", "pro_md"]
 BRIEFING_FIELDS = ["headline", "summary_md"]
 
+# The beginner_md section headers are a FIXED structure — localize them deterministically
+# rather than trusting the model (it translates them inconsistently run-to-run).
+_HEADERS: dict[str, dict[str, str]] = {
+    "id": {
+        "What happened": "Apa yang terjadi",
+        "Who it affects": "Siapa yang terpengaruh",
+        "What to do or watch": "Yang perlu dilakukan atau dipantau",
+    },
+    "zh": {
+        "What happened": "发生了什么",
+        "Who it affects": "影响了谁",
+        "What to do or watch": "该怎么做或关注什么",
+    },
+}
+
+
+def localize_headers(md: str, lang_code: str) -> str:
+    """Force the fixed beginner_md section headers into the target language (only fires when
+    the model left them in English)."""
+    for en, loc in _HEADERS.get(lang_code, {}).items():
+        md = md.replace(f"**{en}**", f"**{loc}**")
+    return md
+
 
 def translate_story(conn, story_id: str) -> dict:
     """Translate one story's content into all LANGS; write to stories.translations."""
@@ -105,6 +128,8 @@ def translate_story(conn, story_id: str) -> dict:
     for code in LANGS:
         t = translate_fields(english, code)
         if t:
+            if t.get("beginner_md"):
+                t["beginner_md"] = localize_headers(t["beginner_md"], code)
             translations[code] = t
     with conn.cursor() as cur:
         cur.execute("UPDATE stories SET translations = %s WHERE id = %s",
