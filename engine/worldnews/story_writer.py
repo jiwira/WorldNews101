@@ -7,6 +7,7 @@ import logging
 from worldnews.crew.crew import analyze_cluster
 from worldnews.fulltext import fetch_fulltext
 from worldnews.reader_format import format_reader_md
+from worldnews.impact_score import score_impact
 from worldnews.sources_memory import get_reputation, update_reputation
 
 logger = logging.getLogger(__name__)
@@ -72,6 +73,12 @@ def write_story_for_cluster(conn, cluster_id: str) -> None:
         analysis.beginner_md = format_reader_md(analysis, _topic)
     except Exception as e:
         logger.debug("reader_format skipped for %s: %s", cluster_id, e)
+
+    # Calibrated impact score (the crew editor under-scores; this fixes ranking).
+    try:
+        analysis.impact_score = score_impact(analysis, _topic)
+    except Exception as e:
+        logger.debug("impact_score skipped for %s: %s", cluster_id, e)
 
     # After crew run: update source reputation for each article
     for art in articles:
