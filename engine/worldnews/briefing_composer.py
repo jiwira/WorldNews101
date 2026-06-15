@@ -115,7 +115,11 @@ def compose_briefing(conn, briefing_date: date | None = None) -> str:
         briefing_id, briefing_date, len(top)
     )
 
-    # Translate the briefing into the other languages.
+    # Translate the briefing into the other languages (skippable — it's slow on a long
+    # summary, and the clean English summary should commit regardless).
+    import os as _os
+    if _os.environ.get("WN_SKIP_BRIEFING_TRANSLATE"):
+        return briefing_id
     try:
         from worldnews.translate import translate_briefing
         translate_briefing(conn, briefing_id)
