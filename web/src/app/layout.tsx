@@ -27,8 +27,8 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body className="min-h-screen bg-paper text-ink antialiased">
         {/* ── Utility strip ── */}
         <div className="bg-ink text-paper">
-          <div className="mx-auto flex max-w-5xl items-center justify-between px-5 py-1.5">
-            <span className="kicker text-paper/70">{t(lang, "tagline_top")}</span>
+          <div className="mx-auto flex max-w-5xl items-center justify-end gap-4 px-5 py-1.5 sm:justify-between">
+            <span className="kicker hidden text-paper/70 sm:inline">{t(lang, "tagline_top")}</span>
             <div className="flex items-center gap-4">
               <UpdateButton lang={lang} />
               <span className="text-paper/30" aria-hidden>·</span>
@@ -52,12 +52,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
         {/* ── Section nav ── */}
         <nav className="sticky top-0 z-20 border-b border-hair bg-surface/95 backdrop-blur">
-          <div className="mx-auto flex max-w-5xl items-center justify-center gap-5 px-5 py-2.5 sm:gap-8">
+          <div className="no-scrollbar mx-auto flex max-w-5xl items-center gap-6 overflow-x-auto px-5 py-2.5 sm:justify-center sm:gap-8">
             {NAV.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="kicker text-ink-soft transition-colors hover:text-brand"
+                className="kicker shrink-0 text-ink-soft transition-colors hover:text-brand"
               >
                 {t(lang, item.key)}
               </Link>

@@ -40,6 +40,10 @@
 
 /* Reusable editorial primitives ------------------------------------------------ */
 
+/* Horizontal scroll without a visible scrollbar (mobile nav). */
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
 /* Kicker / eyebrow — the small tracked uppercase label used all over newspapers. */
 .kicker {
   font-size: 0.6875rem;
