@@ -25,6 +25,8 @@ DEFAULT_RSS_FEEDS: list[tuple[str, str]] = [
     ("http://rss.cnn.com/rss/money_latest.rss", "CNN Business"),
     ("https://fortune.com/feed/", "Fortune"),
     ("https://www.forbes.com/business/feed/", "Forbes"),
+    # Firstpost (India) blocks direct RSS, so pull its business desk via Google News RSS.
+    ("https://news.google.com/rss/search?q=site:firstpost.com/business%20when:5d&hl=en-ID&gl=ID&ceid=ID:en", "Firstpost"),
     # Indonesia-focused
     ("https://www.antaranews.com/rss/ekonomi.xml", "Antara"),
     ("https://finance.detik.com/rss", "Detik Finance"),
