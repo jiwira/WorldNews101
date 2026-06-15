@@ -43,11 +43,11 @@ class JobResponse(BaseModel):
 
 class AskRequest(BaseModel):
     question: str
+    lang: str = "en"
 
 
 class AskResponse(BaseModel):
-    question_id: str
-    status: str
+    answer: str
 
 
 # ── Background jobs ──────────────────────────────────────────────────────────
@@ -134,13 +134,19 @@ async def run_status() -> dict:
     return {"running": _job_running}
 
 
+# Sync (not async) so FastAPI runs this blocking LLM call in a threadpool, and nothing is
+# persisted — the question/answer are not stored anywhere.
 @app.post("/ask", response_model=AskResponse, dependencies=[Depends(_check_token)])
-async def ask(req: AskRequest) -> AskResponse:
-    """Insert a question for async analysis. Returns a question_id."""
-    question_id = str(uuid.uuid4())
-    # TODO: insert into questions table when schema is ready
-    logger.info("Question %s queued: %s", question_id, req.question[:100])
-    return AskResponse(question_id=question_id, status="pending")
+def ask(req: AskRequest) -> AskResponse:
+    """Answer a question from today's news context (stateless)."""
+    from worldnews.db import get_conn
+    from worldnews.ask import answer_question
+    q = (req.question or "").strip()
+    if not q:
+        raise HTTPException(status_code=400, detail="Question required")
+    with get_conn() as conn:
+        answer = answer_question(conn, q[:500], req.lang or "en")
+    return AskResponse(answer=answer)
 
 
 @app.get("/health")

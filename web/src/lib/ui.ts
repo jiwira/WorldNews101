@@ -84,6 +84,14 @@ const S = {
   update_started: { en: "Update started — new stories arrive in a few minutes.", id: "Pembaruan dimulai — berita baru muncul dalam beberapa menit.", zh: "更新已开始 —— 新闻将在几分钟内出现。" },
   update_inprogress: { en: "An update is already running.", id: "Pembaruan sedang berjalan.", zh: "更新已在进行中。" },
   update_offline: { en: "Update engine offline.", id: "Mesin pembaruan tak aktif.", zh: "更新引擎离线。" },
+  // ask page
+  ask_kicker: { en: "Ask", id: "Tanya", zh: "提问" },
+  ask_title: { en: "Ask about today's news — economically", id: "Tanya tentang berita hari ini — secara ekonomi", zh: "用经济视角问今日新闻" },
+  ask_intro: { en: "Answered live from today's analyzed stories. Nothing you ask is stored.", id: "Dijawab langsung dari berita hari ini yang dianalisis. Pertanyaan Anda tidak disimpan.", zh: "基于今日已分析的新闻实时回答。您的提问不会被存储。" },
+  ask_placeholder: { en: "e.g. What is today's news? How does the rupiah move affect me?", id: "mis. Apa berita hari ini? Bagaimana pergerakan rupiah memengaruhi saya?", zh: "例如：今天有什么新闻？卢比走势对我有何影响？" },
+  ask_button: { en: "Ask", id: "Tanya", zh: "提问" },
+  ask_thinking: { en: "Thinking…", id: "Memikirkan…", zh: "思考中…" },
+  ask_error: { en: "Couldn't get an answer — try again.", id: "Tidak dapat jawaban — coba lagi.", zh: "无法获取答案 —— 请重试。" },
 } satisfies Record<string, Str>;
 
 export type UIKey = keyof typeof S;
