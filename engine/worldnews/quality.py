@@ -24,6 +24,9 @@ def looks_garbage(s: str | None) -> bool:
         return True
     if _CJK.search(s):
         return True
+    # Junk prefix like ":[", "[-", ":[-12,..." leaking from a malformed JSON value.
+    if re.match(r"^\s*[:\[\]{}]", s) or re.match(r"^\s*:?\s*\[\s*-?\d", s):
+        return True
     letters = sum(c.isalpha() for c in s)
     nonspace = sum(not c.isspace() for c in s) or 1
     return (letters / nonspace) < 0.5  # mostly digits/punctuation -> garbage
