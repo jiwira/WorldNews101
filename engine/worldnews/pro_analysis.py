@@ -83,4 +83,15 @@ def deep_pro_md(analysis, topic: str) -> str:
             logger.warning("deep_pro_md attempt %d malformed; retrying", attempt + 1)
         except Exception as e:
             logger.warning("deep_pro_md call failed: %s", e)
-    return fallback
+
+    # Never store the crew's pro_md if it's junk (numeric arrays, CJK, etc.).
+    from worldnews.quality import looks_garbage
+    if fallback and not looks_garbage(fallback):
+        return fallback
+    summary = (analysis.impact_summary or "").strip() or "See the neutral summary above."
+    return (
+        f"**Transmission mechanism**\n{summary}\n\n"
+        f"**Markets & asset reactions**\n- Mechanism-level detail was unavailable for this "
+        f"story; see the neutral summary and 'What this means for you'.\n\n"
+        f"**Signals to watch**\n- Follow how this develops in the coming days."
+    )

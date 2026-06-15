@@ -71,6 +71,18 @@ def write_story_for_cluster(conn, cluster_id: str) -> None:
         cur.execute("SELECT topic FROM stories WHERE id = %s", (cluster_id,))
         _row = cur.fetchone()
     _topic = (_row[0] if _row else None) or (articles[0].get("title") if articles else "")
+
+    # Quality guard FIRST: the crew sometimes emits junk (numeric arrays, language switches)
+    # for neutral_md / impact_summary. Clean them before the downstream passes consume them.
+    from worldnews.quality import looks_garbage, clean_neutral_md
+    if looks_garbage(analysis.impact_summary):
+        analysis.impact_summary = (_topic or "Economic news update.")[:200]
+    if looks_garbage(analysis.neutral_md):
+        _arts = "\n".join(
+            f"- {a.get('title','')}: {a.get('summary','')}" for a in articles[:8]
+        )
+        analysis.neutral_md = clean_neutral_md(_topic, analysis.impact_summary, _arts)
+
     try:
         analysis.beginner_md = format_reader_md(analysis, _topic)
     except Exception as e:
